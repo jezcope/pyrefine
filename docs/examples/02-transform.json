@@ -1,0 +1,28 @@
+[
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column numUndergrad using expression jython:return value.replace(\"+\", \"\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": [
+        {
+          "selectNumeric": false,
+          "expression": "value",
+          "selectBlank": true,
+          "selectNonNumeric": true,
+          "selectError": true,
+          "name": "numUndergrad",
+          "from": 0,
+          "to": 3200000000,
+          "type": "range",
+          "columnName": "numUndergrad"
+        }
+      ]
+    },
+    "columnName": "numUndergrad",
+    "expression": "jython:return value.replace(\"+\", \"\")",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  }
+]

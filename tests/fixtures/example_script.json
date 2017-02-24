@@ -1,0 +1,22 @@
+[
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column country",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "country",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Cura%C3%A7ao"
+        ],
+        "to": "Curacao"
+      }
+    ]
+  }
+]

@@ -1,0 +1,218 @@
+[
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column country",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "country",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "USA",
+          "U.S.A."
+        ],
+        "to": "United States"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "U.S.",
+          "US"
+        ],
+        "to": "United States"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "United States",
+          "United States )"
+        ],
+        "to": "United States"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column country",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "country",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Netherlands",
+          "the Netherlands"
+        ],
+        "to": "Netherlands"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "England, UK",
+          "Scotland, UK"
+        ],
+        "to": "United Kingdom"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Scotland",
+          "Scotland, UK"
+        ],
+        "to": "United Kingdom"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "England, United Kingdom",
+          "Scotland, United Kingdom"
+        ],
+        "to": "United Kingdom"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "England",
+          "England, UK"
+        ],
+        "to": "United Kingdom"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column country",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "country",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Canada B1P 6L2"
+        ],
+        "to": "Canada"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column country",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "country",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Canada C1A 4P3 Telephone: 902-566-0439 Fax: 902-566-0795"
+        ],
+        "to": "Canada"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column country",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "country",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Wales"
+        ],
+        "to": "United Kingdom"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column country",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "country",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "United States of America"
+        ],
+        "to": "United States"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column country",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "country",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "UK"
+        ],
+        "to": "United Kingdom"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column country",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "country",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Cura%C3%A7ao"
+        ],
+        "to": "Curacao"
+      }
+    ]
+  }
+]
