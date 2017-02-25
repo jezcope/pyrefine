@@ -76,7 +76,10 @@ class TestOperations:
         with pytest.raises(RuntimeError):
             pyrefine.ops.create({'op': 'does not exist'})
 
-    def test_create_mass_edit(self):
+
+class TestMassEditOperation:
+
+    def test_create_valid_params(self):
         parameters = {'columnName': 'country',
                       'description': 'Mass edit cells in column country',
                       'edits': [{'from': ['Cura%C3%A7ao'],
