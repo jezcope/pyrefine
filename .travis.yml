@@ -12,6 +12,11 @@ install: pip install -U tox-travis
 
 script: tox
 
+matrix:
+  include:
+    - python: 3.6
+      env: TOXENV=flake8
+
 # After you create the Github repo and add it to Travis, run the
 # travis_pypi_setup.py script to finish PyPI deployment setup
 deploy:
