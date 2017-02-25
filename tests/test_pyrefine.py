@@ -48,29 +48,11 @@ class TestScript:
         assert isinstance(script, pyrefine.Script)
 
     def test_load_string(self):
-        script = pyrefine.parse("""
-            [
-            {
-                "op": "core/mass-edit",
-                "description": "Mass edit cells in column country",
-                "engineConfig": {
-                "mode": "row-based",
-                "facets": []
-                },
-                "columnName": "country",
-                "expression": "value",
-                "edits": [
-                {
-                    "fromBlank": false,
-                    "fromError": false,
-                    "from": [
-                    "Cura%C3%A7ao"
-                    ],
-                    "to": "Curacao"
-                }
-                ]
-            }
-            ]""")
+        with open(os.path.dirname(__file__)
+                  + '/fixtures/example_script.json') as f:
+            script_string = f.read()
+
+        script = pyrefine.parse(script_string)
 
         assert script is not None
         assert isinstance(script, pyrefine.Script)
