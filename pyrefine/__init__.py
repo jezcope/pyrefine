@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pyrefine.script import Script, load_script, parse
-from pyrefine import actions
+from pyrefine import ops
 
 __author__ = """Jez Cope"""
 __email__ = 'j.cope@erambler.co.uk'

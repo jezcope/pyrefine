@@ -84,11 +84,15 @@ class TestScript:
         assert len(script) == 0
 
 
-class TestCreateAction:
+class TestOperations:
+
+    def test_create_no_operation(self):
+        with pytest.raises(KeyError):
+            pyrefine.ops.create({})
 
     def test_create_unknown_action(self):
         with pytest.raises(RuntimeError):
-            pyrefine.actions.create({'op': 'does not exist'})
+            pyrefine.ops.create({'op': 'does not exist'})
 
     def test_create_mass_edit(self):
         parameters = {'columnName': 'country',
@@ -100,7 +104,7 @@ class TestCreateAction:
                       'engineConfig': {'facets': [], 'mode': 'row-based'},
                       'expression': 'value',
                       'op': 'core/mass-edit'}
-        action = pyrefine.actions.create(parameters)
+        action = pyrefine.ops.create(parameters)
 
         assert action is not None
-        assert isinstance(action, pyrefine.actions.MassEditAction)
+        assert isinstance(action, pyrefine.ops.MassEditOperation)
