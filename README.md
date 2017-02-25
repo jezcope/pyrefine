@@ -8,11 +8,14 @@
 Execute OpenRefine JSON scripts without OpenRefine (or Java).
 
 - Free software: MIT license
-- Documentation: <https://pyrefine.readthedocs.io>.
+<!-- - Documentation: <https://pyrefine.readthedocs.io>. -->
 
 ## Features ##
 
-- TODO
+- [ ] Execute OpenRefine JSON against a dataset from the command line
+- [ ] Convert OpenRefine JSON to equivalent Python code
+- Core OpenRefine actions:
+  - [ ] `core/mass-edit`
 
 ## Credits ##
 
