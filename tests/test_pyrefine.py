@@ -10,13 +10,13 @@ Tests for `pyrefine` module.
 
 import pytest
 
-from contextlib import contextmanager
-from click.testing import CliRunner
+# from contextlib import contextmanager
+# from click.testing import CliRunner
 
 import os.path
 
 import pyrefine
-from pyrefine import cli
+# from pyrefine import cli
 
 # class TestCLI:
 
@@ -29,17 +29,20 @@ from pyrefine import cli
 #         assert help_result.exit_code == 0
 #         assert '--help  Show this message and exit.' in help_result.output
 
+
 class TestScript:
 
     def test_load_file_object(self):
-        with open(os.path.dirname(__file__) + '/fixtures/example_script.json') as f:
+        with open(os.path.dirname(__file__)
+                  + '/fixtures/example_script.json') as f:
             script = pyrefine.load_script(f)
 
         assert script is not None
         assert isinstance(script, pyrefine.Script)
 
     def test_load_file_name(self):
-        script = pyrefine.load_script(os.path.dirname(__file__) + '/fixtures/example_script.json')
+        script = pyrefine.load_script(os.path.dirname(__file__)
+                                      + '/fixtures/example_script.json')
 
         assert script is not None
         assert isinstance(script, pyrefine.Script)
