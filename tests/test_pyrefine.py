@@ -80,6 +80,14 @@ class TestOperations:
             pyrefine.ops.create({'op': 'does not exist'})
 
 
+@pytest.fixture
+def base_data():
+    return pd.DataFrame({
+            'name': ['Erwin', 'Bronwen', 'Cadwaladr'],
+            'needs_fixing': ['wrong', 'right', 'wrong'],
+            'age': np.arange(23, 29, 2)})
+
+
 class TestMassEditOperation:
 
     def test_create_valid_params(self):
@@ -97,7 +105,7 @@ class TestMassEditOperation:
         assert action is not None
         assert isinstance(action, pyrefine.ops.MassEditOperation)
 
-    def test_simple_edit(self):
+    def test_simple_edit(self, base_data):
         parameters = {'columnName': 'needs_fixing',
                       'description': 'Test mass edit',
                       'edits': [{'from': ['wrong'],
@@ -109,10 +117,6 @@ class TestMassEditOperation:
                       'op': 'core/mass-edit'}
         action = pyrefine.ops.create(parameters)
 
-        base_data = pd.DataFrame({
-            'name': ['Erwin', 'Bronwen', 'Cadwaladr'],
-            'needs_fixing': ['wrong', 'right', 'wrong'],
-            'age': np.arange(23, 29, 2)})
         expected_data = pd.DataFrame({
             'name': ['Erwin', 'Bronwen', 'Cadwaladr'],
             'needs_fixing': ['right', 'right', 'right'],
