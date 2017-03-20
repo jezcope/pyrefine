@@ -14,6 +14,8 @@ import pytest
 # from click.testing import CliRunner
 
 import os.path
+import pandas as pd
+import numpy as np
 
 import pyrefine
 # from pyrefine import cli
@@ -93,3 +95,28 @@ class TestMassEditOperation:
 
         assert action is not None
         assert isinstance(action, pyrefine.ops.MassEditOperation)
+
+    def test_simple_edit(self):
+        parameters = {'columnName': 'needs_fixing',
+                      'description': 'Test mass edit',
+                      'edits': [{'from': ['wrong'],
+                                 'fromBlank': False,
+                                 'fromError': False,
+                                 'to': 'right'}],
+                      'engineConfig': {'facets': [], 'mode': 'row-based'},
+                      'expression': 'value',
+                      'op': 'core/mass-edit'}
+        action = pyrefine.ops.create(parameters)
+
+        base_data = pd.DataFrame({
+            'name': ['Erwin', 'Bronwen', 'Cadwaladr'],
+            'needs_fixing': ['wrong', 'right', 'wrong'],
+            'age': np.arange(23, 29, 2)})
+        expected_data = pd.DataFrame({
+            'name': ['Erwin', 'Bronwen', 'Cadwaladr'],
+            'needs_fixing': ['right', 'right', 'right'],
+            'age': np.arange(23, 29, 2)})
+
+        actual_data = action.execute(base_data)
+
+        assert (expected_data == actual_data).all().all()

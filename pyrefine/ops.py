@@ -3,12 +3,23 @@ class Operation:
     def __init__(self, *args, **kwargs):
         raise NotImplementedError()
 
+    def execute(self, data):
+        return data
+
 
 class MassEditOperation(Operation):
 
     def __init__(self, parameters):
-        pass
+        self.description = parameters['description']
+        self.column = parameters['columnName']
+        self.edits = parameters['edits']
 
+    def execute(self, data):
+        for edit in self.edits:
+            for replace in edit['from']:
+                data.loc[data[self.column] == replace, self.column] = edit['to']
+
+        return data
 
 def create(parameters):
     op_name = parameters['op']
