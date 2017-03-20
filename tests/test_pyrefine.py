@@ -18,18 +18,19 @@ import pandas as pd
 import numpy as np
 
 import pyrefine
-# from pyrefine import cli
+from pyrefine import cli
 
-# class TestCLI:
+@pytest.mark.skip
+class TestCLI:
 
-#     def test_command_line_interface(self):
-#         runner = CliRunner()
-#         result = runner.invoke(cli.main)
-#         assert result.exit_code == 0
-#         assert 'pyrefine.cli.main' in result.output
-#         help_result = runner.invoke(cli.main, ['--help'])
-#         assert help_result.exit_code == 0
-#         assert '--help  Show this message and exit.' in help_result.output
+    def test_command_line_interface(self):
+        runner = CliRunner()
+        result = runner.invoke(cli.main)
+        assert result.exit_code == 0
+        assert 'pyrefine.cli.main' in result.output
+        help_result = runner.invoke(cli.main, ['--help'])
+        assert help_result.exit_code == 0
+        assert '--help  Show this message and exit.' in help_result.output
 
 
 class TestScript:
