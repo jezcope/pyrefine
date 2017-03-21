@@ -31,6 +31,7 @@ Features
 * TODO: Execute OpenRefine JSON against a dataset from the command line
 * TODO: Convert OpenRefine JSON to equivalent Python code                                                            
 * TODO: Implement standard OpenRefine operations
+
   * ``core/mass-edit`` 
 
 Credits
