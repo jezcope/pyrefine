@@ -11,7 +11,7 @@ Tests for `pyrefine` module.
 import pytest
 
 # from contextlib import contextmanager
-# from click.testing import CliRunner
+from click.testing import CliRunner
 
 import os.path
 import pandas as pd
@@ -19,6 +19,7 @@ import numpy as np
 
 import pyrefine
 from pyrefine import cli
+
 
 @pytest.mark.skip
 class TestCLI:

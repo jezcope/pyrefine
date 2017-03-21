@@ -5,4 +5,3 @@ class Operation:
 
     def execute(self, data):
         return data
-
