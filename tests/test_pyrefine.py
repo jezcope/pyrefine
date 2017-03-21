@@ -70,15 +70,15 @@ class TestScript:
         assert len(script) == 0
 
 
-class TestOperations:
+class TestOperation:
 
     def test_create_no_operation(self):
         with pytest.raises(KeyError):
-            pyrefine.ops.create({})
+            pyrefine.ops.Operation.create({})
 
     def test_create_unknown_action(self):
         with pytest.raises(RuntimeError):
-            pyrefine.ops.create({'op': 'does not exist'})
+            pyrefine.ops.Operation.create({'op': 'does not exist'})
 
     def test_create_base_operation(self):
         with pytest.raises(NotImplementedError):
@@ -105,7 +105,7 @@ class TestMassEditOperation:
                       'engineConfig': {'facets': [], 'mode': 'row-based'},
                       'expression': 'value',
                       'op': 'core/mass-edit'}
-        action = pyrefine.ops.create(parameters)
+        action = pyrefine.ops.Operation.create(parameters)
 
         assert action is not None
         assert isinstance(action, pyrefine.ops.MassEditOperation)
@@ -120,7 +120,7 @@ class TestMassEditOperation:
                       'engineConfig': {'facets': [], 'mode': 'row-based'},
                       'expression': 'value',
                       'op': 'core/mass-edit'}
-        action = pyrefine.ops.create(parameters)
+        action = pyrefine.ops.Operation.create(parameters)
 
         expected_data = pd.DataFrame({
             'name': ['Erwin', 'Bronwen', 'Cadwaladr'],
