@@ -79,6 +79,10 @@ class TestOperations:
         with pytest.raises(RuntimeError):
             pyrefine.ops.create({'op': 'does not exist'})
 
+    def test_create_base_operation(self):
+        with pytest.raises(NotImplementedError):
+            pyrefine.ops.Operation()
+
 
 @pytest.fixture
 def base_data():
