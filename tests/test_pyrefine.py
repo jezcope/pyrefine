@@ -16,6 +16,7 @@ from click.testing import CliRunner
 import os.path
 import pandas as pd
 import numpy as np
+import pandas.util.testing as pdt
 
 import pyrefine
 from pyrefine import cli
@@ -114,48 +115,60 @@ class TestOperation:
             pyrefine.ops.Operation()
 
 
-@pytest.fixture
-def base_data():
-    return pd.DataFrame({
-            'name': ['Erwin', 'Bronwen', 'Cadwaladr'],
-            'needs_fixing': ['wrong', 'right', 'wrong'],
-            'age': np.arange(23, 29, 2)})
-
-
 class TestMassEditOperation:
 
-    def test_create_valid_params(self):
-        parameters = {'columnName': 'country',
-                      'description': 'Mass edit cells in column country',
-                      'edits': [{'from': ['Cura%C3%A7ao'],
-                                 'fromBlank': False,
-                                 'fromError': False,
-                                 'to': 'Curacao'}],
-                      'engineConfig': {'facets': [], 'mode': 'row-based'},
-                      'expression': 'value',
-                      'op': 'core/mass-edit'}
-        action = pyrefine.ops.Operation.create(parameters)
+    @pytest.fixture
+    def default_params(self):
+        return {'columnName': 'needs_fixing',
+                'description': 'Test mass edit',
+                'edits': [{'from': ['wrong'],
+                           'fromBlank': False,
+                           'fromError': False,
+                           'to': 'right'}],
+                'engineConfig': {'facets': [], 'mode': 'row-based'},
+                'expression': 'value',
+                'op': 'core/mass-edit'}
+
+    @pytest.fixture
+    def base_data(self):
+        return pd.DataFrame({
+            'other': 'one two three four five'.split(),
+            'needs_fixing': ['wrong', 'right', 'wrong', 'questionable',
+                             None],
+            'age': np.random.randint(18, 70, 5)})
+
+    def test_create_valid_params(self, default_params):
+        action = pyrefine.ops.Operation.create(default_params)
 
         assert action is not None
         assert isinstance(action, pyrefine.ops.MassEditOperation)
 
-    def test_simple_edit(self, base_data):
-        parameters = {'columnName': 'needs_fixing',
-                      'description': 'Test mass edit',
-                      'edits': [{'from': ['wrong'],
-                                 'fromBlank': False,
-                                 'fromError': False,
-                                 'to': 'right'}],
-                      'engineConfig': {'facets': [], 'mode': 'row-based'},
-                      'expression': 'value',
-                      'op': 'core/mass-edit'}
-        action = pyrefine.ops.Operation.create(parameters)
+    def test_single_edit(self, base_data, default_params):
+        action = pyrefine.ops.Operation.create(default_params)
 
-        expected_data = pd.DataFrame({
-            'name': ['Erwin', 'Bronwen', 'Cadwaladr'],
-            'needs_fixing': ['right', 'right', 'right'],
-            'age': np.arange(23, 29, 2)})
+        expected_data = base_data.copy()
+        expected_data.needs_fixing = ['right', 'right', 'right',
+                                      'questionable', None]
 
         actual_data = action.execute(base_data)
 
-        assert (expected_data == actual_data).all().all()
+        pdt.assert_frame_equal(expected_data, actual_data)
+
+    def test_multiple_edits(self, base_data, default_params):
+        parameters = dict(default_params,
+                          edits=[{'from': ['wrong'],
+                                  'fromBlank': False,
+                                  'fromError': False,
+                                  'to': 'right'},
+                                 {'from': ['questionable'],
+                                  'fromBlank': False,
+                                  'fromError': False,
+                                  'to': '?'}])
+        action = pyrefine.ops.Operation.create(parameters)
+
+        expected_data = base_data.copy()
+        expected_data.needs_fixing = ['right', 'right', 'right', '?', None]
+
+        actual_data = action.execute(base_data)
+
+        pdt.assert_frame_equal(expected_data, actual_data)
