@@ -21,6 +21,27 @@ import pyrefine
 from pyrefine import cli
 
 
+@pytest.fixture
+def doaj_data():
+    filename = os.path.join(os.path.dirname(__file__),
+                            'fixtures/doaj-article-sample.csv')
+    return pd.read_csv(filename)
+
+
+@pytest.fixture
+def doaj_data_clean():
+    filename = os.path.join(os.path.dirname(__file__),
+                            'fixtures/doaj-article-sample-cleaned.csv')
+    return pd.read_csv(filename)
+
+
+@pytest.fixture
+def doaj_script():
+    filename = os.path.join(os.path.dirname(__file__),
+                            'fixtures/doaj-article-clean.json')
+    return open(filename).read()
+
+
 @pytest.mark.skip
 class TestCLI:
 
@@ -68,6 +89,14 @@ class TestScript:
         assert script is not None
         assert isinstance(script, pyrefine.Script)
         assert len(script) == 0
+
+    @pytest.mark.xfail
+    def test_whole_script(self, doaj_data, doaj_data_clean, doaj_script):
+        script = pyrefine.parse(doaj_script)
+
+        result = script.execute(doaj_data)
+
+        assert result.equals(doaj_data_clean)
 
 
 class TestOperation:

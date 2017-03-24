@@ -1,0 +1,110 @@
+[
+  {
+    "op": "core/multivalued-cell-split",
+    "description": "Split multi-valued cells in column Authors",
+    "columnName": "Authors",
+    "keyColumnName": "Title",
+    "separator": "|",
+    "mode": "plain"
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column Authors",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "Authors",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "A. Khan Vakeel",
+          "Vakeel A. Khan"
+        ],
+        "to": "A. Khan Vakeel"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Chandra Naveen",
+          "Naveen Chandra"
+        ],
+        "to": "Chandra Naveen"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "B. K. Revathi",
+          "B. K Revathi"
+        ],
+        "to": "B. K. Revathi"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Santiago Garcia-Granda",
+          "Santiago García-Granda"
+        ],
+        "to": "Santiago Garcia-Granda"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Jian-Chao Yuan",
+          "Jianchao Yuan"
+        ],
+        "to": "Jian-Chao Yuan"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Chang-Ge Zheng",
+          "ChangGe Zheng"
+        ],
+        "to": "Chang-Ge Zheng"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Il'ya A. Gural'skiy",
+          "Il`ya A. Gural`skiy"
+        ],
+        "to": "Il'ya A. Gural'skiy"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Rongbin Huang",
+          "Rong-Bin Huang"
+        ],
+        "to": "Rongbin Huang"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Sheng-Lan Zhao",
+          "Shenglan Zhao"
+        ],
+        "to": "Sheng-Lan Zhao"
+      }
+    ]
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "description": "Join multi-valued cells in column Authors",
+    "columnName": "Authors",
+    "keyColumnName": "Title",
+    "separator": "|"
+  }
+]
