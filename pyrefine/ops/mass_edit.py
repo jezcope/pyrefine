@@ -16,4 +16,5 @@ class MassEditOperation(Operation):
 
         return data
 
+
 Operation.register('core/mass-edit', MassEditOperation)

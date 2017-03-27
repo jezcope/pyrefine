@@ -19,7 +19,6 @@ class Operation:
         """Register a class to handle the given operation."""
         cls.__operations[op_name] = op_class
 
-
     def __init__(self, *args, **kwargs):
         raise NotImplementedError()
 
