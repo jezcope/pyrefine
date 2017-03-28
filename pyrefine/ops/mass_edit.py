@@ -13,6 +13,9 @@ class MassEditOperation(Operation):
             for replace in edit['from']:
                 data.loc[data[self.column] == replace, self.column] \
                     = edit['to']
+            if edit['fromBlank']:
+                data.loc[data[self.column].isnull(), self.column] \
+                    = edit['to']
 
         return data
 

@@ -172,3 +172,19 @@ class TestMassEditOperation:
         actual_data = action.execute(base_data)
 
         pdt.assert_frame_equal(expected_data, actual_data)
+
+    def test_fromblank_edit(self, base_data, default_params):
+        parameters = dict(default_params,
+                          edits=[{'from': [],
+                                  'fromBlank': True,
+                                  'fromError': False,
+                                  'to': 'not blank'}])
+        action = pyrefine.ops.Operation.create(parameters)
+
+        expected_data = base_data.copy()
+        expected_data.needs_fixing = ['wrong', 'right', 'wrong',
+                                      'questionable', 'not blank']
+
+        actual_data = action.execute(base_data)
+
+        pdt.assert_frame_equal(expected_data, actual_data)
