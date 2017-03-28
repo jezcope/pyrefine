@@ -188,3 +188,21 @@ class TestMassEditOperation:
         actual_data = action.execute(base_data)
 
         pdt.assert_frame_equal(expected_data, actual_data)
+
+
+class TestMultivalueCellSplitOperation:
+
+    @pytest.fixture
+    def default_params(self):
+        return {"op": "core/multivalued-cell-split",
+                "description": "Split multi-valued cells in column Authors",
+                "columnName": "Authors",
+                "keyColumnName": "Title",
+                "separator": "|",
+                "mode": "plain"}
+
+    def test_create_valid_params(self, default_params):
+        action = pyrefine.ops.Operation.create(default_params)
+
+        assert action is not None
+        assert isinstance(action, pyrefine.ops.MultivalueCellSplitOperation)
