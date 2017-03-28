@@ -6,7 +6,6 @@ python:
   - "3.6"
   - "3.5"
   - "3.4"
-  - "3.3"
 
 install: pip install -U tox-travis
 
@@ -28,4 +27,4 @@ deploy:
   on:
     tags: true
     repo: jezcope/pyrefine
-    condition: $TOXENV == py27
+    condition: $TOXENV == py36
