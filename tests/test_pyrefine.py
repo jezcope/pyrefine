@@ -231,3 +231,30 @@ class TestColumnRemovalOperation:
 
         assert 'remove_me' not in actual_data.columns
         assert 'keep_me' in actual_data.columns
+
+
+class TestColumnRenameOperation:
+
+    @pytest.fixture
+    def default_params(self):
+        return {"op": "core/column-rename",
+                "description": "Rename column oldname to blah",
+                "oldColumnName": "oldname",
+                "newColumnName": "blah"}
+
+    def test_create_valid_params(self, default_params):
+        action = pyrefine.ops.Operation.create(default_params)
+
+        assert action is not None
+        assert isinstance(action, pyrefine.ops.ColumnRenameOperation)
+
+    def test_remove_column(self, default_params):
+        base_data = pd.DataFrame({'keep_me': np.arange(20),
+                                  'oldname': np.arange(20)})
+
+        action = pyrefine.ops.Operation.create(default_params)
+        actual_data = action.execute(base_data)
+
+        assert 'oldname' not in actual_data.columns
+        assert 'blah' in actual_data.columns
+        assert actual_data.blah.equals(base_data.oldname)

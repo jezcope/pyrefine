@@ -50,7 +50,7 @@ Features
     * ``core/column-addition``
     * ``core/column-move``
     * ``core/column-removal`` ✓
-    * ``core/column-rename``
+    * ``core/column-rename`` ✓
     * ``core/column-reorder``
     * ``core/column-split``
 
