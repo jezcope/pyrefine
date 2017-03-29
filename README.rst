@@ -49,7 +49,7 @@ Features
     * ``core/column-addition-by-fetching-urls``
     * ``core/column-addition``
     * ``core/column-move``
-    * ``core/column-removal``
+    * ``core/column-removal`` ✓
     * ``core/column-rename``
     * ``core/column-reorder``
     * ``core/column-split``

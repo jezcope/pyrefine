@@ -206,3 +206,28 @@ class TestMultivalueCellSplitOperation:
 
         assert action is not None
         assert isinstance(action, pyrefine.ops.MultivalueCellSplitOperation)
+
+
+class TestColumnRemovalOperation:
+
+    @pytest.fixture
+    def default_params(self):
+        return {"op": "core/column-removal",
+                "description": "Remove column remove_me",
+                "columnName": "remove_me"}
+
+    def test_create_valid_params(self, default_params):
+        action = pyrefine.ops.Operation.create(default_params)
+
+        assert action is not None
+        assert isinstance(action, pyrefine.ops.ColumnRemovalOperation)
+
+    def test_remove_column(self, default_params):
+        base_data = pd.DataFrame({'keep_me': np.arange(20),
+                                  'remove_me': np.arange(20)})
+
+        action = pyrefine.ops.Operation.create(default_params)
+        actual_data = action.execute(base_data)
+
+        assert 'remove_me' not in actual_data.columns
+        assert 'keep_me' in actual_data.columns
