@@ -236,6 +236,50 @@ class TestMultivaluedCellSplitOperation:
             action.execute(base_data)
 
 
+class TestMultivaluedCellJoinOperation:
+
+    @pytest.fixture
+    def default_params(self):
+        return {"op": "core/multivalued-cell-join",
+                "description": "Join multi-valued cells in column split_me",
+                "columnName": "join_me",
+                "keyColumnName": "Title",
+                "separator": "|",
+                "mode": "plain"}
+
+    @pytest.fixture
+    def base_data(self):
+        return pd.DataFrame({'id': np.arange(3),
+                             'join_me': [['Join', 'these', 'up'],
+                                         ['No splitting here'],
+                                         ['Item 1', 'item 2', 'item_3']]})
+
+    def test_create_valid_params(self, default_params):
+        action = pyrefine.ops.Operation.create(default_params)
+
+        assert action is not None
+        assert isinstance(action, pyrefine.ops.MultivaluedCellJoinOperation)
+
+    def test_split_column(self, default_params, base_data):
+        action = pyrefine.ops.Operation.create(default_params)
+
+        expected_data = base_data.copy()
+        expected_data.join_me = ['Join|these|up',
+                                 'No splitting here',
+                                 'Item 1|item 2|item_3']
+
+        actual_data = action.execute(base_data)
+
+        assert actual_data.equals(expected_data)
+
+    def test_split_numeric_column(self, default_params, base_data):
+        parameters = dict(default_params,
+                          columnName='id')
+
+        action = pyrefine.ops.Operation.create(parameters)
+
+        with pytest.raises(TypeError):
+            action.execute(base_data)
 
 
 class TestColumnRemovalOperation:
