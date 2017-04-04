@@ -18,7 +18,3 @@ class MultivaluedCellJoinOperation(Operation):
         except AttributeError:
             raise TypeError('Non-string data found in column "{}"'
                             .format(self.column))
-
-
-Operation.register('core/multivalued-cell-join',
-                   MultivaluedCellJoinOperation)

@@ -18,6 +18,3 @@ class MassEditOperation(Operation):
                     = edit['to']
 
         return data
-
-
-Operation.register('core/mass-edit', MassEditOperation)

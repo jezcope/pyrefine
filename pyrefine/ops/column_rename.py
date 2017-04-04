@@ -10,6 +10,3 @@ class ColumnRenameOperation(Operation):
 
     def execute(self, data):
         return data.rename(columns=self.transform)
-
-
-Operation.register('core/column-rename', ColumnRenameOperation)

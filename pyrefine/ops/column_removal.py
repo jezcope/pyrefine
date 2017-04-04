@@ -9,6 +9,3 @@ class ColumnRemovalOperation(Operation):
 
     def execute(self, data):
         return data.drop(self.column, axis=1)
-
-
-Operation.register('core/column-removal', ColumnRemovalOperation)
