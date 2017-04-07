@@ -189,6 +189,21 @@ class TestMassEditOperation:
 
         pdt.assert_frame_equal(expected_data, actual_data)
 
+    def test_multivalued_cell(self, base_data, default_params):
+        action = pyrefine.ops.Operation.create(default_params)
+
+        base_data.needs_fixing = ['wrong', 'right',
+                                  ['wrong', 'foo bar', 'baz', 'wrong'],
+                                  'questionable', ['right', 'wrong']]
+        expected_data = base_data.copy()
+        expected_data.needs_fixing = ['right', 'right',
+                                      ['right', 'foo bar', 'baz', 'right'],
+                                      'questionable', ['right', 'right']]
+
+        actual_data = action.execute(base_data)
+
+        pdt.assert_frame_equal(expected_data, actual_data)
+
 
 class TestMultivaluedCellSplitOperation:
 
