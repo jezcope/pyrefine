@@ -14,6 +14,7 @@ import pytest
 from click.testing import CliRunner
 
 import os.path
+from tempfile import mktemp
 import pandas as pd
 import numpy as np
 import pandas.util.testing as pdt
@@ -43,17 +44,46 @@ def doaj_script():
     return open(filename).read()
 
 
-@pytest.mark.skip
 class TestCLI:
 
     def test_command_line_interface(self):
         runner = CliRunner()
         result = runner.invoke(cli.main)
         assert result.exit_code == 0
-        assert 'pyrefine.cli.main' in result.output
+        assert 'pyrefine' in result.output
         help_result = runner.invoke(cli.main, ['--help'])
         assert help_result.exit_code == 0
         assert '--help  Show this message and exit.' in help_result.output
+
+    def test_cli_execute_stdout(self):
+        runner = CliRunner()
+        script_file = os.path.join(os.path.dirname(__file__),
+                                   'fixtures/doaj-article-clean.json')
+        data_file = os.path.join(os.path.dirname(__file__),
+                                 'fixtures/doaj-article-sample.csv')
+        result = runner.invoke(cli.execute, [script_file, data_file])
+
+        expected_data = open(os.path.join(os.path.dirname(__file__),
+                                          'fixtures/doaj-article-sample-cleaned.csv')) \
+                                          .read()
+
+        assert result.output == expected_data
+
+    def test_cli_execute_outfile(self):
+        runner = CliRunner()
+        script_file = os.path.join(os.path.dirname(__file__),
+                                   'fixtures/doaj-article-clean.json')
+        data_file = os.path.join(os.path.dirname(__file__),
+                                 'fixtures/doaj-article-sample.csv')
+        out_file = mktemp()
+        result = runner.invoke(cli.execute, [script_file, data_file, '-o', out_file])
+
+        expected_data = open(os.path.join(os.path.dirname(__file__),
+                                          'fixtures/doaj-article-sample-cleaned.csv')) \
+                                          .read()
+        actual_data = open(out_file).read()
+
+        assert actual_data == expected_data
 
 
 class TestScript:
