@@ -1,5 +1,25 @@
 [
   {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column Language",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "Language",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "English"
+        ],
+        "to": "EN"
+      }
+    ]
+  },
+  {
     "op": "core/multivalued-cell-split",
     "description": "Split multi-valued cells in column Authors",
     "columnName": "Authors",
@@ -51,7 +71,7 @@
           "Santiago Garcia-Granda",
           "Santiago García-Granda"
         ],
-        "to": "Santiago Garcia-Granda"
+        "to": "Santiago García-Granda"
       },
       {
         "fromBlank": false,
@@ -87,7 +107,7 @@
           "Rongbin Huang",
           "Rong-Bin Huang"
         ],
-        "to": "Rongbin Huang"
+        "to": "Rong-Bin Huang"
       },
       {
         "fromBlank": false,
@@ -96,7 +116,73 @@
           "Sheng-Lan Zhao",
           "Shenglan Zhao"
         ],
-        "to": "Sheng-Lan Zhao"
+        "to": "Shenglan Zhao"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column Authors",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "Authors",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "R. A. Nagalakshmi",
+          "R.A. Nagalakshmi"
+        ],
+        "to": "R. A. Nagalakshmi"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "H. C. Devarajegowda",
+          "H.C. Devarajegowda"
+        ],
+        "to": "H. C. Devarajegowda"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "J. Kamal Raja",
+          "J. Kamalraja"
+        ],
+        "to": "J. Kamal Raja"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "R. V. Krishnakumar",
+          "R.V. Krishnakumar"
+        ],
+        "to": "R. V. Krishnakumar"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Edward R. T. Tiekink",
+          "Edward R.T. Tiekink"
+        ],
+        "to": "Edward R. T. Tiekink"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Guo -Qing Jiang",
+          "Guo-Qing Jiang"
+        ],
+        "to": "Guo-Qing Jiang"
       }
     ]
   },

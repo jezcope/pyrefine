@@ -91,7 +91,6 @@ class TestScript:
         assert isinstance(script, pyrefine.Script)
         assert len(script) == 0
 
-    @pytest.mark.xfail
     def test_whole_script(self, doaj_data, doaj_data_clean, doaj_script):
         script = pyrefine.parse(doaj_script)
 
