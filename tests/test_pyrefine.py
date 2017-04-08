@@ -97,7 +97,7 @@ class TestScript:
 
         result = script.execute(doaj_data)
 
-        assert result.equals(doaj_data_clean)
+        pdt.assert_frame_equal(result, doaj_data_clean)
 
 
 class TestOperation:
@@ -239,7 +239,7 @@ class TestMultivaluedCellSplitOperation:
 
         actual_data = action.execute(base_data)
 
-        assert actual_data.equals(expected_data)
+        pdt.assert_frame_equal(actual_data, expected_data)
 
     def test_split_numeric_column(self, default_params, base_data):
         parameters = dict(default_params,
@@ -285,7 +285,7 @@ class TestMultivaluedCellJoinOperation:
 
         actual_data = action.execute(base_data)
 
-        assert actual_data.equals(expected_data)
+        pdt.assert_frame_equal(actual_data, expected_data)
 
     def test_split_numeric_column(self, default_params, base_data):
         parameters = dict(default_params,
@@ -346,4 +346,5 @@ class TestColumnRenameOperation:
 
         assert 'oldname' not in actual_data.columns
         assert 'blah' in actual_data.columns
-        assert actual_data.blah.equals(base_data.oldname)
+        pdt.assert_series_equal(actual_data.blah,
+                                base_data.oldname.rename("blah"))
