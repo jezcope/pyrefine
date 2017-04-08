@@ -38,8 +38,8 @@ Features
     * ``core/blank-down``
     * ``core/fill-down``
     * ``core/key-value-columnize``
-    * ``core/multi-valued-cell-join``
-    * ``core/multi-valued-cell-split``
+    * ``core/multi-valued-cell-join`` ✓
+    * ``core/multi-valued-cell-split`` ✓
     * ``core/text-transform``
     * ``core/transpose-columns-into-rows``
     * ``core/transpose-rows-into-columns``
@@ -47,7 +47,7 @@ Features
   * Column
 
     * ``core/column-addition-by-fetching-urls``
-    * ``core/column-addition``
+    * ``core/column-addition`` *
     * ``core/column-move``
     * ``core/column-removal`` ✓
     * ``core/column-rename`` ✓
