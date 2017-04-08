@@ -24,24 +24,36 @@ from pyrefine import cli
 
 
 @pytest.fixture
-def doaj_data():
-    filename = os.path.join(os.path.dirname(__file__),
-                            'fixtures/doaj-article-sample.csv')
-    return pd.read_csv(filename)
+def doaj_data_filename():
+    return os.path.join(os.path.dirname(__file__),
+                        'fixtures/doaj-article-sample.csv')
 
 
 @pytest.fixture
-def doaj_data_clean():
-    filename = os.path.join(os.path.dirname(__file__),
-                            'fixtures/doaj-article-sample-cleaned.csv')
-    return pd.read_csv(filename)
+def doaj_data(doaj_data_filename):
+    return pd.read_csv(doaj_data_filename)
 
 
 @pytest.fixture
-def doaj_script():
-    filename = os.path.join(os.path.dirname(__file__),
-                            'fixtures/doaj-article-clean.json')
-    return open(filename).read()
+def doaj_data_clean_filename():
+    return os.path.join(os.path.dirname(__file__),
+                        'fixtures/doaj-article-sample-cleaned.csv')
+
+
+@pytest.fixture
+def doaj_data_clean(doaj_data_clean_filename):
+    return pd.read_csv(doaj_data_clean_filename)
+
+
+@pytest.fixture
+def doaj_script_filename():
+    return os.path.join(os.path.dirname(__file__),
+                        'fixtures/doaj-article-clean.json')
+
+
+@pytest.fixture
+def doaj_script(doaj_script_filename):
+    return open(doaj_script_filename).read()
 
 
 class TestCLI:
@@ -55,32 +67,29 @@ class TestCLI:
         assert help_result.exit_code == 0
         assert '--help  Show this message and exit.' in help_result.output
 
-    def test_cli_execute_stdout(self):
+    def test_cli_execute_stdout(self, doaj_script_filename,
+                                doaj_data_filename,
+                                doaj_data_clean_filename):
         runner = CliRunner()
-        script_file = os.path.join(os.path.dirname(__file__),
-                                   'fixtures/doaj-article-clean.json')
-        data_file = os.path.join(os.path.dirname(__file__),
-                                 'fixtures/doaj-article-sample.csv')
-        result = runner.invoke(cli.execute, [script_file, data_file])
+        result = runner.invoke(cli.execute,
+                               [doaj_script_filename, doaj_data_filename])
 
-        expected_data = open(os.path.join(os.path.dirname(__file__),
-                                          'fixtures/doaj-article-sample-cleaned.csv')) \
-                                          .read()
+        expected_data = open(doaj_data_clean_filename).read()
 
+        assert result.exit_code == 0
         assert result.output == expected_data
 
-    def test_cli_execute_outfile(self):
+    def test_cli_execute_outfile(self, doaj_script_filename,
+                                 doaj_data_filename,
+                                 doaj_data_clean_filename):
         runner = CliRunner()
-        script_file = os.path.join(os.path.dirname(__file__),
-                                   'fixtures/doaj-article-clean.json')
-        data_file = os.path.join(os.path.dirname(__file__),
-                                 'fixtures/doaj-article-sample.csv')
         out_file = mktemp()
-        result = runner.invoke(cli.execute, [script_file, data_file, '-o', out_file])
+        result = runner.invoke(cli.execute,
+                               [doaj_script_filename, doaj_data_filename,
+                                '-o', out_file])
+        expected_data = open(doaj_data_clean_filename).read()
 
-        expected_data = open(os.path.join(os.path.dirname(__file__),
-                                          'fixtures/doaj-article-sample-cleaned.csv')) \
-                                          .read()
+        assert result.exit_code == 0
         actual_data = open(out_file).read()
 
         assert actual_data == expected_data
@@ -283,13 +292,13 @@ class TestMultivaluedCellSplitOperation:
         action = pyrefine.ops.Operation.create(default_params)
 
         base_data.split_me = ['This|  has|  some |spaces ',
-                                 'No splitting here ',
-                                 'Item 1|item 2|item_3']
+                              'No splitting here ',
+                              'Item 1|item 2|item_3']
 
         expected_data = base_data.copy()
         expected_data.split_me = [['This', 'has', 'some', 'spaces'],
-                             ['No splitting here '],
-                             ['Item 1', 'item 2', 'item_3']]
+                                  ['No splitting here '],
+                                  ['Item 1', 'item 2', 'item_3']]
 
         actual_data = action.execute(base_data)
 
