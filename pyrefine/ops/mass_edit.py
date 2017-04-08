@@ -14,7 +14,7 @@ class MassEditOperation(Operation):
                 # TODO: loop/condition order could probably be better
                 if data[self.column].dtype == object:
                     data[self.column] = data[self.column] \
-                                        .apply(self.__transform,
+                                        .apply(self._transform,
                                                from_val=replace,
                                                to_val=edit['to'])
                 else:
@@ -28,11 +28,10 @@ class MassEditOperation(Operation):
         return data
 
     @classmethod
-    def __transform(cls, val, from_val, to_val):
-        print(val, from_val, to_val)
+    def _transform(cls, val, from_val, to_val):
         if val == from_val:
             return to_val
         elif type(val) is list:
-            return [cls.__transform(x, from_val, to_val) for x in val]
+            return [cls._transform(x, from_val, to_val) for x in val]
         else:
             return val
