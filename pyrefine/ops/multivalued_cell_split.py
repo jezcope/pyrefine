@@ -9,8 +9,10 @@ class MultivaluedCellSplitOperation(Operation):
         self.separator = parameters['separator']
 
     def transform(self, value):
-        print(value)
-        return value.split(self.separator)
+        if self.separator in value:
+            return list(map(str.strip, value.split(self.separator)))
+        else:
+            return [value]
 
     def execute(self, data):
         try:

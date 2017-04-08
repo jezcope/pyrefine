@@ -250,6 +250,22 @@ class TestMultivaluedCellSplitOperation:
         with pytest.raises(TypeError):
             action.execute(base_data)
 
+    def test_with_spaces(self, default_params, base_data):
+        action = pyrefine.ops.Operation.create(default_params)
+
+        base_data.split_me = ['This|  has|  some |spaces ',
+                                 'No splitting here ',
+                                 'Item 1|item 2|item_3']
+
+        expected_data = base_data.copy()
+        expected_data.split_me = [['This', 'has', 'some', 'spaces'],
+                             ['No splitting here '],
+                             ['Item 1', 'item 2', 'item_3']]
+
+        actual_data = action.execute(base_data)
+
+        pdt.assert_frame_equal(actual_data, expected_data)
+
 
 class TestMultivaluedCellJoinOperation:
 
