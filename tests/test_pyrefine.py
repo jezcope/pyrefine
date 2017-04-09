@@ -8,6 +8,8 @@ test_pyrefine
 Tests for `pyrefine` module.
 """
 
+# flake8: noqa
+
 import pytest
 
 # from contextlib import contextmanager

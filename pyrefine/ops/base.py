@@ -1,25 +1,37 @@
+"""Base class for all operations.
+
+This module implements functionality common to all PyRefine operations. In
+particular, it defines a base class, ``Operation`` and a metaclass
+``OperationClass``, which between them ensure that all subclasses of
+``Operation`` are automatically registered for use by the factory method
+``Operation.create()``, which takes a dictionary of parameters as read from an
+OpenRefine JSON script and returns an instance of an appropriate subclass.
+"""
 import re
 
 
 class OperationClass(type):
-    """Metaclass for operations which automatically registers the operation
-    for use.
+    """Metaclass for operations.
+
+    This is used as the metaclass for ``Operation`` which then automatically
+    calls ``Operation._register()`` for each subclass, registers the operation
+    for use by ``Operation.create()``.
     """
 
-    """Register the operation at the point when the class is initialised."""
     def __init__(self, name, bases, namespace, **kwargs):
+        """Register the operation at class initialisation."""
         super().__init__(name, bases, namespace)
         self._register(self.__operation_string(name), self)
 
     __camel_case_re = re.compile('([a-z])([A-Z])')
 
     def __operation_string(cls, classname):
-        """Convert a class name FooBarOperation to a string "core/foo-bar"
+        """Convert a class name FooBarOperation to a string "core/foo-bar".
 
         Strips off the last 9 characters of the classname ("Operation"),
         inserts a hyphen before each uppercase letter, then converts the
-        whole thing to lowercase."""
-
+        whole thing to lowercase.
+        """
         op_name = cls.__camel_case_re.sub(r'\1-\2', classname[:-9]) \
                                      .lower()
         return '{}/{}'.format(cls._or_module, op_name)
@@ -41,6 +53,12 @@ class Operation(metaclass=OperationClass):
         """Construct an appropriate subclass of ``Operation``.
 
         This chooses the class based on the 'op' parameter.
+
+        Args:
+            parameters (dict): A description of the operation to instantiate
+
+        Returns:
+            Operation: An appropriate subclass of Operation
         """
         op_name = parameters['op']
         if op_name not in cls.__operations:
@@ -54,7 +72,5 @@ class Operation(metaclass=OperationClass):
         cls.__operations[op_name] = op_class
 
     def __init__(self, *args, **kwargs):
-        """Just raise NotImplementedError because this class should not be
-        instatiated directly.
-        """
+        """Raise ``NotImplementedError``."""
         raise NotImplementedError()
