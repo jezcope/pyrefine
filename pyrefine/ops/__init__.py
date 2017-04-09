@@ -2,11 +2,7 @@
 
 from .base import Operation
 
-from .mass_edit import MassEditOperation
-from .multivalued_cell_split import MultivaluedCellSplitOperation
-from .multivalued_cell_join import MultivaluedCellJoinOperation
-
-from .column_removal import ColumnRemovalOperation
-from .column_rename import ColumnRenameOperation
+from .cell import *
+from .column import *
 
 # flake8: noqa
