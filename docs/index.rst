@@ -9,10 +9,12 @@ Contents:
    readme
    installation
    usage
-   modules
+   design
    contributing
    authors
    history
+
+.. include:: ../README.rst
 
 Indices and tables
 ==================

@@ -1,8 +1,6 @@
-"""Operations package"""
+"""Operations package."""
 
-from .base import Operation
+from .base import Operation     # noqa: F401, F403
 
-from .cell import *
-from .column import *
-
-# flake8: noqa
+from .cell import *             # noqa: F401, F403
+from .column import *           # noqa: F401, F403

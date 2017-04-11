@@ -28,7 +28,7 @@ class OperationClass(type):
     def __operation_string(cls, classname):
         """Convert a class name FooBarOperation to a string "core/foo-bar".
 
-        Strips off the last 9 characters of the classname ("Operation"),
+        Strip off the last 9 characters of the classname ("Operation"),
         inserts a hyphen before each uppercase letter, then converts the
         whole thing to lowercase.
         """
@@ -50,15 +50,16 @@ class Operation(metaclass=OperationClass):
 
     @classmethod
     def create(cls, parameters):
-        """Construct an appropriate subclass of ``Operation``.
+        """Construct an appropriate subclass of :class:`Operation`.
 
         This chooses the class based on the 'op' parameter.
 
         Args:
-            parameters (dict): A description of the operation to instantiate
+            parameters (:class:`dict`): A description of the operation to
+                instantiate
 
         Returns:
-            Operation: An appropriate subclass of Operation
+            :class:`Operation`: An appropriate subclass of :class:`Operation`
         """
         op_name = parameters['op']
         if op_name not in cls.__operations:
@@ -72,5 +73,5 @@ class Operation(metaclass=OperationClass):
         cls.__operations[op_name] = op_class
 
     def __init__(self, *args, **kwargs):
-        """Raise ``NotImplementedError``."""
+        """Raise :exc:`NotImplementedError`."""
         raise NotImplementedError()

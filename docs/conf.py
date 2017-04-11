@@ -12,6 +12,8 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
+#
+# flake8: noqa
 
 import sys
 import os
@@ -40,7 +42,15 @@ import pyrefine
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.napoleon', 'sphinx.ext.todo']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.graphviz',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.todo',
+    'sphinx.ext.viewcode',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -105,6 +115,11 @@ pygments_style = 'sphinx'
 # If true, keep warnings as "system message" paragraphs in the built
 # documents.
 #keep_warnings = False
+
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3.4', None),
+    'pandas': ('http://pandas.pydata.org/pandas-docs/stable', None),
+}
 
 
 # -- Options for HTML output -------------------------------------------
