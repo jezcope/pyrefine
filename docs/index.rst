@@ -9,7 +9,8 @@ Contents:
    readme
    installation
    usage
-   design
+   modules
+   todo
    contributing
    authors
    history

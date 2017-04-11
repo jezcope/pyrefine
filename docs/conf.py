@@ -48,7 +48,6 @@ extensions = [
     'sphinx.ext.graphviz',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
-    'sphinx.ext.todo',
     'sphinx.ext.viewcode',
 ]
 
