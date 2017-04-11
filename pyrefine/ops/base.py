@@ -60,6 +60,10 @@ class Operation(metaclass=OperationClass):
 
         Returns:
             :class:`Operation`: An appropriate subclass of :class:`Operation`
+
+        Raises:
+            :exc:`RuntimeError`: If a class for the requested operation cannot
+                be found.
         """
         op_name = parameters['op']
         if op_name not in cls.__operations:

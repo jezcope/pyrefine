@@ -12,19 +12,27 @@ Things to do
     * ``core/key-value-columnize``
     * ``core/multi-valued-cell-join`` ✓
     * ``core/multi-valued-cell-split`` ✓
-    * ``core/text-transform`` *
+    * ``core/text-transform`` ★
     * ``core/transpose-columns-into-rows``
     * ``core/transpose-rows-into-columns``
 
   * Column
 
     * ``core/column-addition-by-fetching-urls``
-    * ``core/column-addition`` *
-    * ``core/column-move``
+    * ``core/column-addition`` ★
+    * ``core/column-move`` ✓
     * ``core/column-removal`` ✓
     * ``core/column-rename`` ✓
     * ``core/column-reorder``
     * ``core/column-split``
+
+  * Row
+
+    * ``core/denormalize``
+    * ``core/row-flag``
+    * ``core/row-removal``
+    * ``core/row-reorder``
+    * ``core/row-star``
 
   * Reconciliation
 
@@ -37,10 +45,7 @@ Things to do
     * ``core/recon-match-specific-topic``
     * ``core/recon``
 
-  * Row
+``★`` indicates operations that rely on GREL_ (General Refine
+Expression Language).
 
-    * ``core/denormalize``
-    * ``core/row-flag``
-    * ``core/row-removal``
-    * ``core/row-reorder``
-    * ``core/row-star``
+.. _GREL: https://github.com/OpenRefine/OpenRefine/wiki/General-Refine-Expression-Language

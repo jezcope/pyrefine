@@ -420,3 +420,105 @@ class TestColumnRenameOperation:
         assert 'blah' in actual_data.columns
         pdt.assert_series_equal(actual_data.blah,
                                 base_data.oldname.rename("blah"))
+
+
+class TestColumnMoveOperation:
+
+    @pytest.fixture
+    def default_params(self):
+        return {"op": "core/column-move",
+                "description": "Move column DOI to position 0",
+                "columnName": "DOI",
+                "index": 0}
+
+    @pytest.fixture
+    def base_data(self):
+        return pd.DataFrame(np.eye(4, dtype=int),
+                            columns='first second third fourth'.split())
+
+    def test_create_valid_params(self, default_params):
+        action = pyrefine.ops.Operation.create(default_params)
+
+        assert action is not None
+        assert isinstance(action, pyrefine.ops.ColumnMoveOperation)
+
+    def test_move_column_to_start(self, default_params, base_data):
+        params = dict(default_params,
+                      columnName='third',
+                      index=0)
+
+        action = pyrefine.ops.Operation.create(params)
+
+        expected_data = pd.DataFrame([[0, 1, 0, 0],
+                                      [0, 0, 1, 0],
+                                      [1, 0, 0, 0],
+                                      [0, 0, 0, 1]],
+                                     columns='third first second fourth'.split())
+
+        actual_data = action.execute(base_data)
+
+        pdt.assert_frame_equal(actual_data, expected_data)
+
+    def test_move_column_to_end(self, default_params, base_data):
+        params = dict(default_params,
+                      columnName='third',
+                      index=3)
+
+        action = pyrefine.ops.Operation.create(params)
+
+        expected_data = pd.DataFrame([[1, 0, 0, 0],
+                                      [0, 1, 0, 0],
+                                      [0, 0, 0, 1],
+                                      [0, 0, 1, 0]],
+                                     columns='first second fourth third'.split())
+
+        actual_data = action.execute(base_data)
+
+        pdt.assert_frame_equal(actual_data, expected_data)
+
+    def test_move_column_to_right(self, default_params, base_data):
+        params = dict(default_params,
+                      columnName='second',
+                      index=2)
+
+        action = pyrefine.ops.Operation.create(params)
+
+        expected_data = pd.DataFrame([[1, 0, 0, 0],
+                                      [0, 0, 1, 0],
+                                      [0, 1, 0, 0],
+                                      [0, 0, 0, 1]],
+                                     columns='first third second fourth'.split())
+
+        actual_data = action.execute(base_data)
+
+        pdt.assert_frame_equal(actual_data, expected_data)
+
+    def test_move_column_before_start(self, default_params, base_data):
+        params = dict(default_params,
+                      columnName='third',
+                      index=-2)
+
+        action = pyrefine.ops.Operation.create(params)
+        
+        with pytest.raises(IndexError):
+            action.execute(base_data)
+
+    def test_move_column_after_end(self, default_params, base_data):
+        params = dict(default_params,
+                      columnName='third',
+                      index=4)
+
+        action = pyrefine.ops.Operation.create(params)
+        
+        with pytest.raises(IndexError):
+            action.execute(base_data)
+
+    def test_move_non_existent_column(self, default_params, base_data):
+        params = dict(default_params,
+                      columnName='seventh',
+                      index=2)
+
+        action = pyrefine.ops.Operation.create(params)
+        
+        with pytest.raises(KeyError):
+            action.execute(base_data)
