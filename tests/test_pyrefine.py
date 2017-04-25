@@ -167,8 +167,18 @@ class TestOperation:
             pyrefine.ops.create({'op': 'does not exist'})
 
 
+class CommonOperationTests:
 
-class TestMassEditOperation:
+    def test_create_valid_params(self, default_params):
+        action = pyrefine.ops.create(default_params)
+
+        assert action is not None
+        assert isinstance(action, self.op_class)
+
+
+class TestMassEditOperation(CommonOperationTests):
+
+    op_class = pyrefine.ops.MassEditOperation
 
     @pytest.fixture
     def default_params(self):
@@ -189,12 +199,6 @@ class TestMassEditOperation:
             'needs_fixing': ['wrong', 'right', 'wrong', 'questionable',
                              None],
             'age': np.random.randint(18, 70, 5)})
-
-    def test_create_valid_params(self, default_params):
-        action = pyrefine.ops.Operation.create(default_params)
-
-        assert action is not None
-        assert isinstance(action, pyrefine.ops.MassEditOperation)
 
     def test_single_edit(self, base_data, default_params):
         action = pyrefine.ops.create(default_params)
@@ -258,7 +262,9 @@ class TestMassEditOperation:
         pdt.assert_frame_equal(expected_data, actual_data)
 
 
-class TestMultivaluedCellSplitOperation:
+class TestMultivaluedCellSplitOperation(CommonOperationTests):
+
+    op_class = pyrefine.ops.MultivaluedCellSplitOperation
 
     @pytest.fixture
     def default_params(self):
@@ -275,12 +281,6 @@ class TestMultivaluedCellSplitOperation:
                              'split_me': ['Split|these|up',
                                           'No splitting here',
                                           'Item 1|item 2|item_3']})
-
-    def test_create_valid_params(self, default_params):
-        action = pyrefine.ops.Operation.create(default_params)
-
-        assert action is not None
-        assert isinstance(action, pyrefine.ops.MultivaluedCellSplitOperation)
 
     def test_split_column(self, default_params, base_data):
         action = pyrefine.ops.create(default_params)
@@ -320,7 +320,9 @@ class TestMultivaluedCellSplitOperation:
         pdt.assert_frame_equal(actual_data, expected_data)
 
 
-class TestMultivaluedCellJoinOperation:
+class TestMultivaluedCellJoinOperation(CommonOperationTests):
+
+    op_class = pyrefine.ops.MultivaluedCellJoinOperation
 
     @pytest.fixture
     def default_params(self):
@@ -337,12 +339,6 @@ class TestMultivaluedCellJoinOperation:
                              'join_me': [['Join', 'these', 'up'],
                                          ['No splitting here'],
                                          ['Item 1', 'item 2', 'item_3']]})
-
-    def test_create_valid_params(self, default_params):
-        action = pyrefine.ops.Operation.create(default_params)
-
-        assert action is not None
-        assert isinstance(action, pyrefine.ops.MultivaluedCellJoinOperation)
 
     def test_split_column(self, default_params, base_data):
         action = pyrefine.ops.create(default_params)
@@ -366,19 +362,15 @@ class TestMultivaluedCellJoinOperation:
             action.execute(base_data)
 
 
-class TestColumnRemovalOperation:
+class TestColumnRemovalOperation(CommonOperationTests):
+
+    op_class = pyrefine.ops.ColumnRemovalOperation
 
     @pytest.fixture
     def default_params(self):
         return {"op": "core/column-removal",
                 "description": "Remove column remove_me",
                 "columnName": "remove_me"}
-
-    def test_create_valid_params(self, default_params):
-        action = pyrefine.ops.Operation.create(default_params)
-
-        assert action is not None
-        assert isinstance(action, pyrefine.ops.ColumnRemovalOperation)
 
     def test_remove_column(self, default_params):
         base_data = pd.DataFrame({'keep_me': np.arange(20),
@@ -391,7 +383,9 @@ class TestColumnRemovalOperation:
         assert 'keep_me' in actual_data.columns
 
 
-class TestColumnRenameOperation:
+class TestColumnRenameOperation(CommonOperationTests):
+
+    op_class = pyrefine.ops.ColumnRenameOperation
 
     @pytest.fixture
     def default_params(self):
@@ -399,12 +393,6 @@ class TestColumnRenameOperation:
                 "description": "Rename column oldname to blah",
                 "oldColumnName": "oldname",
                 "newColumnName": "blah"}
-
-    def test_create_valid_params(self, default_params):
-        action = pyrefine.ops.create(default_params)
-
-        assert action is not None
-        assert isinstance(action, pyrefine.ops.ColumnRenameOperation)
 
     def test_remove_column(self, default_params):
         base_data = pd.DataFrame({'keep_me': np.arange(20),
@@ -419,7 +407,9 @@ class TestColumnRenameOperation:
                                 base_data.oldname.rename("blah"))
 
 
-class TestColumnMoveOperation:
+class TestColumnMoveOperation(CommonOperationTests):
+
+    op_class = pyrefine.ops.ColumnMoveOperation
 
     @pytest.fixture
     def default_params(self):
@@ -432,12 +422,6 @@ class TestColumnMoveOperation:
     def base_data(self):
         return pd.DataFrame(np.eye(4, dtype=int),
                             columns='first second third fourth'.split())
-
-    def test_create_valid_params(self, default_params):
-        action = pyrefine.ops.create(default_params)
-
-        assert action is not None
-        assert isinstance(action, pyrefine.ops.ColumnMoveOperation)
 
     def test_move_column_to_start(self, default_params, base_data):
         params = dict(default_params,
@@ -496,7 +480,7 @@ class TestColumnMoveOperation:
                       index=-2)
 
         action = pyrefine.ops.create(params)
-        
+
         with pytest.raises(IndexError):
             action.execute(base_data)
 
@@ -506,7 +490,7 @@ class TestColumnMoveOperation:
                       index=4)
 
         action = pyrefine.ops.create(params)
-        
+
         with pytest.raises(IndexError):
             action.execute(base_data)
 
@@ -516,6 +500,6 @@ class TestColumnMoveOperation:
                       index=2)
 
         action = pyrefine.ops.create(params)
-        
+
         with pytest.raises(KeyError):
             action.execute(base_data)
