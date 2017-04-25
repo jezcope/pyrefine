@@ -4,11 +4,13 @@
 
     ColumnRemovalOperation
     ColumnRenameOperation
+    ColumnMoveOperation
 """
-from .base import Operation
+from .base import operation
 
 
-class ColumnRemovalOperation(Operation):
+@operation('column-removal')
+class ColumnRemovalOperation:
     """Remove a specified column from the dataset.
 
     Expects a ``dict`` as loaded from OpenRefine JSON script.
@@ -38,7 +40,8 @@ class ColumnRemovalOperation(Operation):
         return data.drop(self.column, axis=1)
 
 
-class ColumnRenameOperation(Operation):
+@operation('column-rename')
+class ColumnRenameOperation:
     """Rename a specified column in the dataset.
 
     Expects a ``dict`` as loaded from OpenRefine JSON script.
@@ -68,7 +71,8 @@ class ColumnRenameOperation(Operation):
         return data.rename(columns=self.transform)
 
 
-class ColumnMoveOperation(Operation):
+@operation('column-move')
+class ColumnMoveOperation:
     """Move a specified column to a different position."""
 
     def __init__(self, parameters):

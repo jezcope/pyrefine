@@ -160,15 +160,12 @@ class TestOperation:
 
     def test_create_no_operation(self):
         with pytest.raises(KeyError):
-            pyrefine.ops.Operation.create({})
+            pyrefine.ops.create({})
 
     def test_create_unknown_action(self):
         with pytest.raises(RuntimeError):
-            pyrefine.ops.Operation.create({'op': 'does not exist'})
+            pyrefine.ops.create({'op': 'does not exist'})
 
-    def test_create_base_operation(self):
-        with pytest.raises(NotImplementedError):
-            pyrefine.ops.Operation()
 
 
 class TestMassEditOperation:
@@ -200,7 +197,7 @@ class TestMassEditOperation:
         assert isinstance(action, pyrefine.ops.MassEditOperation)
 
     def test_single_edit(self, base_data, default_params):
-        action = pyrefine.ops.Operation.create(default_params)
+        action = pyrefine.ops.create(default_params)
 
         expected_data = base_data.copy()
         expected_data.needs_fixing = ['right', 'right', 'right',
@@ -220,7 +217,7 @@ class TestMassEditOperation:
                                   'fromBlank': False,
                                   'fromError': False,
                                   'to': '?'}])
-        action = pyrefine.ops.Operation.create(parameters)
+        action = pyrefine.ops.create(parameters)
 
         expected_data = base_data.copy()
         expected_data.needs_fixing = ['right', 'right', 'right', '?', None]
@@ -235,7 +232,7 @@ class TestMassEditOperation:
                                   'fromBlank': True,
                                   'fromError': False,
                                   'to': 'not blank'}])
-        action = pyrefine.ops.Operation.create(parameters)
+        action = pyrefine.ops.create(parameters)
 
         expected_data = base_data.copy()
         expected_data.needs_fixing = ['wrong', 'right', 'wrong',
@@ -246,7 +243,7 @@ class TestMassEditOperation:
         pdt.assert_frame_equal(expected_data, actual_data)
 
     def test_multivalued_cell(self, base_data, default_params):
-        action = pyrefine.ops.Operation.create(default_params)
+        action = pyrefine.ops.create(default_params)
 
         base_data.needs_fixing = ['wrong', 'right',
                                   ['wrong', 'foo bar', 'baz', 'wrong'],
@@ -286,7 +283,7 @@ class TestMultivaluedCellSplitOperation:
         assert isinstance(action, pyrefine.ops.MultivaluedCellSplitOperation)
 
     def test_split_column(self, default_params, base_data):
-        action = pyrefine.ops.Operation.create(default_params)
+        action = pyrefine.ops.create(default_params)
 
         expected_data = base_data.copy()
         expected_data.split_me = [['Split', 'these', 'up'],
@@ -301,13 +298,13 @@ class TestMultivaluedCellSplitOperation:
         parameters = dict(default_params,
                           columnName='id')
 
-        action = pyrefine.ops.Operation.create(parameters)
+        action = pyrefine.ops.create(parameters)
 
         with pytest.raises(TypeError):
             action.execute(base_data)
 
     def test_with_spaces(self, default_params, base_data):
-        action = pyrefine.ops.Operation.create(default_params)
+        action = pyrefine.ops.create(default_params)
 
         base_data.split_me = ['This|  has|  some |spaces ',
                               'No splitting here ',
@@ -348,7 +345,7 @@ class TestMultivaluedCellJoinOperation:
         assert isinstance(action, pyrefine.ops.MultivaluedCellJoinOperation)
 
     def test_split_column(self, default_params, base_data):
-        action = pyrefine.ops.Operation.create(default_params)
+        action = pyrefine.ops.create(default_params)
 
         expected_data = base_data.copy()
         expected_data.join_me = ['Join|these|up',
@@ -363,7 +360,7 @@ class TestMultivaluedCellJoinOperation:
         parameters = dict(default_params,
                           columnName='id')
 
-        action = pyrefine.ops.Operation.create(parameters)
+        action = pyrefine.ops.create(parameters)
 
         with pytest.raises(TypeError):
             action.execute(base_data)
@@ -387,7 +384,7 @@ class TestColumnRemovalOperation:
         base_data = pd.DataFrame({'keep_me': np.arange(20),
                                   'remove_me': np.arange(20)})
 
-        action = pyrefine.ops.Operation.create(default_params)
+        action = pyrefine.ops.create(default_params)
         actual_data = action.execute(base_data)
 
         assert 'remove_me' not in actual_data.columns
@@ -404,7 +401,7 @@ class TestColumnRenameOperation:
                 "newColumnName": "blah"}
 
     def test_create_valid_params(self, default_params):
-        action = pyrefine.ops.Operation.create(default_params)
+        action = pyrefine.ops.create(default_params)
 
         assert action is not None
         assert isinstance(action, pyrefine.ops.ColumnRenameOperation)
@@ -413,7 +410,7 @@ class TestColumnRenameOperation:
         base_data = pd.DataFrame({'keep_me': np.arange(20),
                                   'oldname': np.arange(20)})
 
-        action = pyrefine.ops.Operation.create(default_params)
+        action = pyrefine.ops.create(default_params)
         actual_data = action.execute(base_data)
 
         assert 'oldname' not in actual_data.columns
@@ -437,7 +434,7 @@ class TestColumnMoveOperation:
                             columns='first second third fourth'.split())
 
     def test_create_valid_params(self, default_params):
-        action = pyrefine.ops.Operation.create(default_params)
+        action = pyrefine.ops.create(default_params)
 
         assert action is not None
         assert isinstance(action, pyrefine.ops.ColumnMoveOperation)
@@ -447,7 +444,7 @@ class TestColumnMoveOperation:
                       columnName='third',
                       index=0)
 
-        action = pyrefine.ops.Operation.create(params)
+        action = pyrefine.ops.create(params)
 
         expected_data = pd.DataFrame([[0, 1, 0, 0],
                                       [0, 0, 1, 0],
@@ -464,7 +461,7 @@ class TestColumnMoveOperation:
                       columnName='third',
                       index=3)
 
-        action = pyrefine.ops.Operation.create(params)
+        action = pyrefine.ops.create(params)
 
         expected_data = pd.DataFrame([[1, 0, 0, 0],
                                       [0, 1, 0, 0],
@@ -481,7 +478,7 @@ class TestColumnMoveOperation:
                       columnName='second',
                       index=2)
 
-        action = pyrefine.ops.Operation.create(params)
+        action = pyrefine.ops.create(params)
 
         expected_data = pd.DataFrame([[1, 0, 0, 0],
                                       [0, 0, 1, 0],
@@ -498,7 +495,7 @@ class TestColumnMoveOperation:
                       columnName='third',
                       index=-2)
 
-        action = pyrefine.ops.Operation.create(params)
+        action = pyrefine.ops.create(params)
         
         with pytest.raises(IndexError):
             action.execute(base_data)
@@ -508,7 +505,7 @@ class TestColumnMoveOperation:
                       columnName='third',
                       index=4)
 
-        action = pyrefine.ops.Operation.create(params)
+        action = pyrefine.ops.create(params)
         
         with pytest.raises(IndexError):
             action.execute(base_data)
@@ -518,7 +515,7 @@ class TestColumnMoveOperation:
                       columnName='seventh',
                       index=2)
 
-        action = pyrefine.ops.Operation.create(params)
+        action = pyrefine.ops.create(params)
         
         with pytest.raises(KeyError):
             action.execute(base_data)

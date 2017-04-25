@@ -7,10 +7,11 @@
     MultivaluedCellJoinOperation
 """
 
-from .base import Operation
+from .base import operation
 
 
-class MassEditOperation(Operation):
+@operation('mass-edit')
+class MassEditOperation:
     """Apply a simple substition to a whole column.
 
     Expects a ``dict`` as loaded from OpenRefine JSON script.
@@ -65,7 +66,8 @@ class MassEditOperation(Operation):
             return val
 
 
-class MultivaluedCellSplitOperation(Operation):
+@operation('multivalued-cell-split')
+class MultivaluedCellSplitOperation:
     """Split string values into lists with a given separator.
 
     Expects a ``dict`` as loaded from OpenRefine JSON script.
@@ -109,7 +111,8 @@ class MultivaluedCellSplitOperation(Operation):
                             .format(self.column))
 
 
-class MultivaluedCellJoinOperation(Operation):
+@operation('multivalued-cell-join')
+class MultivaluedCellJoinOperation:
     """Join lists into single strings with a separator.
 
     Expects a ``dict`` as loaded from OpenRefine JSON script.

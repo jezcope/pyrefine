@@ -2,7 +2,7 @@
 
 import json
 
-from .ops import Operation
+from .ops import create
 
 
 class Script(object):
@@ -12,7 +12,7 @@ class Script(object):
         """Parse a script from a JSON string."""
         if s is not None:
             self.parsed_script = json.loads(s)
-            self.operations = [Operation.create(params)
+            self.operations = [create(params)
                                for params in self.parsed_script]
 
     def __len__(self):
