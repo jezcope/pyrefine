@@ -28,6 +28,7 @@ class Script(object):
 
         Returns:
             :class:`pandas.DataFrame`: The transformed data.
+
         """
         for op in self.operations:
             data = op.execute(data)
@@ -43,6 +44,7 @@ def load_script(f):
 
     Returns:
         :class:`Script`: The parsed script object.
+
     """
     if isinstance(f, str):
         f = open(f)

@@ -24,6 +24,7 @@ def create(parameters):
     Raises:
         :exc:`RuntimeError`: If a class for the requested operation cannot
             be found.
+
     """
     op_name = parameters['op']
     if op_name not in _operations:

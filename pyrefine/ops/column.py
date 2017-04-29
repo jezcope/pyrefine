@@ -36,6 +36,7 @@ class ColumnRemovalOperation:
 
         Returns:
             DataFrame: The transformed data.
+
         """
         return data.drop(self.column, axis=1)
 
@@ -67,6 +68,7 @@ class ColumnRenameOperation:
 
         Returns:
             DataFrame: The transformed data.
+
         """
         return data.rename(columns=self.transform)
 
@@ -95,6 +97,7 @@ class ColumnMoveOperation:
             :exc:`IndexError`: If the target column index is less than 0 or
                 past the last column.
             :exc:`KeyError`: If the column to be moved is not found.
+
         """
         cols = list(data.columns)
 
