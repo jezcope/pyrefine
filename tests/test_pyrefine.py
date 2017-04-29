@@ -24,6 +24,18 @@ import pandas.util.testing as pdt
 import pyrefine
 from pyrefine import cli
 
+
+def assert_op_changes_data(params, *, base_data, expected_data):
+    op = pyrefine.ops.create(params)
+    actual_data = op.execute(base_data)
+
+    pdt.assert_frame_equal(expected_data, actual_data)
+
+def assert_op_raises(params, data, exception):
+    op = pyrefine.ops.create(params)
+    with pytest.raises(exception):
+        op.execute(data)
+
 def print_frame_differing_rows(df1, df2):
     """Print the difference between two :class:`DataFrame`s
 
@@ -201,65 +213,46 @@ class TestMassEditOperation(CommonOperationTests):
             'age': np.random.randint(18, 70, 5)})
 
     def test_single_edit(self, base_data, default_params):
-        action = pyrefine.ops.create(default_params)
-
-        expected_data = base_data.copy()
-        expected_data.needs_fixing = ['right', 'right', 'right',
-                                      'questionable', None]
-
-        actual_data = action.execute(base_data)
-
-        pdt.assert_frame_equal(expected_data, actual_data)
+        assert_op_changes_data(
+            default_params,
+            base_data=base_data,
+            expected_data=base_data.assign(
+                needs_fixing=['right', 'right', 'right',
+                              'questionable', None]))
 
     def test_multiple_edits(self, base_data, default_params):
-        parameters = dict(default_params,
-                          edits=[{'from': ['wrong'],
-                                  'fromBlank': False,
-                                  'fromError': False,
-                                  'to': 'right'},
-                                 {'from': ['questionable'],
-                                  'fromBlank': False,
-                                  'fromError': False,
-                                  'to': '?'}])
-        action = pyrefine.ops.create(parameters)
-
-        expected_data = base_data.copy()
-        expected_data.needs_fixing = ['right', 'right', 'right', '?', None]
-
-        actual_data = action.execute(base_data)
-
-        pdt.assert_frame_equal(expected_data, actual_data)
+        assert_op_changes_data(
+            dict(default_params,
+                 edits=[{'from': ['wrong'], 'to': 'right',
+                         'fromBlank': False, 'fromError': False},
+                        {'from': ['questionable'], 'to': '?',
+                         'fromBlank': False, 'fromError': False}]),
+            base_data=base_data,
+            expected_data=base_data.assign(
+                needs_fixing=['right', 'right', 'right', '?', None]))
 
     def test_fromblank_edit(self, base_data, default_params):
-        parameters = dict(default_params,
-                          edits=[{'from': [],
-                                  'fromBlank': True,
-                                  'fromError': False,
-                                  'to': 'not blank'}])
-        action = pyrefine.ops.create(parameters)
-
-        expected_data = base_data.copy()
-        expected_data.needs_fixing = ['wrong', 'right', 'wrong',
-                                      'questionable', 'not blank']
-
-        actual_data = action.execute(base_data)
-
-        pdt.assert_frame_equal(expected_data, actual_data)
+        assert_op_changes_data(
+            dict(default_params,
+                 edits=[{'from': [], 'to': 'not blank',
+                         'fromBlank': True,
+                         'fromError': False}]),
+            base_data=base_data,
+            expected_data=base_data.assign(
+                needs_fixing=['wrong', 'right', 'wrong',
+                              'questionable', 'not blank']))
 
     def test_multivalued_cell(self, base_data, default_params):
-        action = pyrefine.ops.create(default_params)
-
-        base_data.needs_fixing = ['wrong', 'right',
-                                  ['wrong', 'foo bar', 'baz', 'wrong'],
-                                  'questionable', ['right', 'wrong']]
-        expected_data = base_data.copy()
-        expected_data.needs_fixing = ['right', 'right',
-                                      ['right', 'foo bar', 'baz', 'right'],
-                                      'questionable', ['right', 'right']]
-
-        actual_data = action.execute(base_data)
-
-        pdt.assert_frame_equal(expected_data, actual_data)
+        assert_op_changes_data(
+            default_params,
+            base_data=base_data.assign(
+                needs_fixing=['wrong', 'right',
+                              ['wrong', 'foo bar', 'baz', 'wrong'],
+                              'questionable', ['right', 'wrong']]),
+            expected_data=base_data.assign(
+                needs_fixing=['right', 'right',
+                              ['right', 'foo bar', 'baz', 'right'],
+                              'questionable', ['right', 'right']]))
 
 
 class TestMultivaluedCellSplitOperation(CommonOperationTests):
@@ -283,41 +276,29 @@ class TestMultivaluedCellSplitOperation(CommonOperationTests):
                                           'Item 1|item 2|item_3']})
 
     def test_split_column(self, default_params, base_data):
-        action = pyrefine.ops.create(default_params)
-
-        expected_data = base_data.copy()
-        expected_data.split_me = [['Split', 'these', 'up'],
-                                  ['No splitting here'],
-                                  ['Item 1', 'item 2', 'item_3']]
-
-        actual_data = action.execute(base_data)
-
-        pdt.assert_frame_equal(actual_data, expected_data)
+        assert_op_changes_data(
+            default_params,
+            base_data=base_data,
+            expected_data=base_data.assign(
+                split_me=[['Split', 'these', 'up'],
+                          ['No splitting here'],
+                          ['Item 1', 'item 2', 'item_3']]))
 
     def test_split_numeric_column(self, default_params, base_data):
-        parameters = dict(default_params,
-                          columnName='id')
-
-        action = pyrefine.ops.create(parameters)
-
-        with pytest.raises(TypeError):
-            action.execute(base_data)
+        assert_op_raises(dict(default_params, columnName='id'),
+                         base_data, TypeError)
 
     def test_with_spaces(self, default_params, base_data):
-        action = pyrefine.ops.create(default_params)
-
-        base_data.split_me = ['This|  has|  some |spaces ',
-                              'No splitting here ',
-                              'Item 1|item 2|item_3']
-
-        expected_data = base_data.copy()
-        expected_data.split_me = [['This', 'has', 'some', 'spaces'],
-                                  ['No splitting here '],
-                                  ['Item 1', 'item 2', 'item_3']]
-
-        actual_data = action.execute(base_data)
-
-        pdt.assert_frame_equal(actual_data, expected_data)
+        assert_op_changes_data(
+            default_params,
+            base_data=base_data.assign(
+                split_me=['This|  has|  some |spaces ',
+                          'No splitting here ',
+                          'Item 1|item 2|item_3']),
+            expected_data=base_data.assign(
+                split_me=[['This', 'has', 'some', 'spaces'],
+                          ['No splitting here '],
+                          ['Item 1', 'item 2', 'item_3']]))
 
 
 class TestMultivaluedCellJoinOperation(CommonOperationTests):
@@ -341,25 +322,17 @@ class TestMultivaluedCellJoinOperation(CommonOperationTests):
                                          ['Item 1', 'item 2', 'item_3']]})
 
     def test_split_column(self, default_params, base_data):
-        action = pyrefine.ops.create(default_params)
-
-        expected_data = base_data.copy()
-        expected_data.join_me = ['Join|these|up',
-                                 'No splitting here',
-                                 'Item 1|item 2|item_3']
-
-        actual_data = action.execute(base_data)
-
-        pdt.assert_frame_equal(actual_data, expected_data)
+        assert_op_changes_data(
+            default_params,
+            base_data=base_data,
+            expected_data=base_data.assign(
+                join_me=['Join|these|up',
+                         'No splitting here',
+                         'Item 1|item 2|item_3']))
 
     def test_split_numeric_column(self, default_params, base_data):
-        parameters = dict(default_params,
-                          columnName='id')
-
-        action = pyrefine.ops.create(parameters)
-
-        with pytest.raises(TypeError):
-            action.execute(base_data)
+        assert_op_raises(dict(default_params, columnName='id'),
+                         base_data, TypeError)
 
 
 class TestColumnRemovalOperation(CommonOperationTests):
@@ -424,82 +397,42 @@ class TestColumnMoveOperation(CommonOperationTests):
                             columns='first second third fourth'.split())
 
     def test_move_column_to_start(self, default_params, base_data):
-        params = dict(default_params,
-                      columnName='third',
-                      index=0)
-
-        action = pyrefine.ops.create(params)
-
-        expected_data = pd.DataFrame([[0, 1, 0, 0],
-                                      [0, 0, 1, 0],
-                                      [1, 0, 0, 0],
-                                      [0, 0, 0, 1]],
-                                     columns='third first second fourth'.split())
-
-        actual_data = action.execute(base_data)
-
-        pdt.assert_frame_equal(actual_data, expected_data)
-
+        assert_op_changes_data(
+            dict(default_params, columnName='third', index=0),
+            base_data=base_data,
+            expected_data=pd.DataFrame([[0, 1, 0, 0],
+                                        [0, 0, 1, 0],
+                                        [1, 0, 0, 0],
+                                        [0, 0, 0, 1]],
+                                       columns='third first second fourth'.split()))
     def test_move_column_to_end(self, default_params, base_data):
-        params = dict(default_params,
-                      columnName='third',
-                      index=3)
-
-        action = pyrefine.ops.create(params)
-
-        expected_data = pd.DataFrame([[1, 0, 0, 0],
-                                      [0, 1, 0, 0],
-                                      [0, 0, 0, 1],
-                                      [0, 0, 1, 0]],
-                                     columns='first second fourth third'.split())
-
-        actual_data = action.execute(base_data)
-
-        pdt.assert_frame_equal(actual_data, expected_data)
+        assert_op_changes_data(
+            dict(default_params, columnName='third', index=3),
+            base_data=base_data,
+            expected_data=pd.DataFrame([[1, 0, 0, 0],
+                                        [0, 1, 0, 0],
+                                        [0, 0, 0, 1],
+                                        [0, 0, 1, 0]],
+                                       columns='first second fourth third'.split()))
 
     def test_move_column_to_right(self, default_params, base_data):
-        params = dict(default_params,
-                      columnName='second',
-                      index=2)
-
-        action = pyrefine.ops.create(params)
-
-        expected_data = pd.DataFrame([[1, 0, 0, 0],
-                                      [0, 0, 1, 0],
-                                      [0, 1, 0, 0],
-                                      [0, 0, 0, 1]],
-                                     columns='first third second fourth'.split())
-
-        actual_data = action.execute(base_data)
-
-        pdt.assert_frame_equal(actual_data, expected_data)
+        assert_op_changes_data(
+            dict(default_params, columnName='second', index=2),
+            base_data=base_data,
+            expected_data=pd.DataFrame([[1, 0, 0, 0],
+                                        [0, 0, 1, 0],
+                                        [0, 1, 0, 0],
+                                        [0, 0, 0, 1]],
+                                       columns='first third second fourth'.split()))
 
     def test_move_column_before_start(self, default_params, base_data):
-        params = dict(default_params,
-                      columnName='third',
-                      index=-2)
-
-        action = pyrefine.ops.create(params)
-
-        with pytest.raises(IndexError):
-            action.execute(base_data)
+        assert_op_raises(dict(default_params, columnName='third', index=-2),
+                         base_data, IndexError)
 
     def test_move_column_after_end(self, default_params, base_data):
-        params = dict(default_params,
-                      columnName='third',
-                      index=4)
-
-        action = pyrefine.ops.create(params)
-
-        with pytest.raises(IndexError):
-            action.execute(base_data)
+        assert_op_raises(dict(default_params, columnName='third', index=4),
+                         base_data, IndexError)
 
     def test_move_non_existent_column(self, default_params, base_data):
-        params = dict(default_params,
-                      columnName='seventh',
-                      index=2)
-
-        action = pyrefine.ops.create(params)
-
-        with pytest.raises(KeyError):
-            action.execute(base_data)
+        assert_op_raises(dict(default_params, columnName='seventh', index=2),
+                         base_data, KeyError)
