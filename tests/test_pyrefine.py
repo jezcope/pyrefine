@@ -227,6 +227,18 @@ class TestMassEditOperation(CommonOperationTests):
                 needs_fixing=['right', 'right', 'right',
                               'questionable', None]))
 
+    def test_single_edit_numeric(self, base_data, default_params):
+        assert_op_changes_data(
+            dict(default_params,
+                 edits=[{'from': [200, 2000],
+                         'fromBlank': False,
+                         'fromError': False,
+                         'to': 20}]),
+            base_data=base_data.assign(
+                needs_fixing=[123, 78, 200, 20, 2000]),
+            expected_data=base_data.assign(
+                needs_fixing=[123, 78, 20, 20, 20]))
+
     def test_multiple_edits(self, base_data, default_params):
         assert_op_changes_data(
             dict(default_params,
