@@ -37,24 +37,32 @@ class MassEditOperation:
 
         Returns:
             DataFrame: The transformed data.
+
         """
+        column_data = data[self.column].copy()
+        if data[self.column].dtype == object:
+            do_replace = self._do_replace_object
+        else:
+            do_replace = self._do_replace
+
         for edit in self.edits:
-            for replace in edit['from']:
-                # TODO: loop/condition order could probably be better
-                if data[self.column].dtype == object:
-                    data[self.column] = data[self.column] \
-                                        .apply(self._transform,
-                                               from_val=replace,
-                                               to_val=edit['to'])
-                else:
-                    data.loc[data[self.column] == replace, self.column] \
-                        = edit['to']
+            for from_val in edit['from']:
+                column_data = do_replace(column_data, from_val, edit['to'])
 
             if edit['fromBlank']:
-                data.loc[data[self.column].isnull(), self.column] \
-                    = edit['to']
+                column_data[column_data.isnull()] = edit['to']
 
-        return data
+        return data.assign(**{self.column: column_data})
+
+    @classmethod
+    def _do_replace(cls, column, from_val, to_val):
+        column[column == from_val] = to_val
+        return column
+
+    @classmethod
+    def _do_replace_object(cls, column, from_val, to_val):
+        return column.apply(cls._transform,
+                            from_val=from_val, to_val=to_val)
 
     @classmethod
     def _transform(cls, val, from_val, to_val):
@@ -102,6 +110,7 @@ class MultivaluedCellSplitOperation:
 
         Raises:
             TypeError: If data in the relevant column is not a string.
+
         """
         try:
             return data.assign(**{self.column:
@@ -141,6 +150,7 @@ class MultivaluedCellJoinOperation:
 
         Returns:
             DataFrame: The transformed data.
+
         """
         return data.assign(**{self.column:
                               data[self.column].apply(self._transform)})

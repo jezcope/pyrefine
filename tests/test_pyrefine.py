@@ -187,6 +187,13 @@ class CommonOperationTests:
         assert action is not None
         assert isinstance(action, self.op_class)
 
+    def test_input_immutable(self, default_params, base_data):
+        op = pyrefine.ops.create(default_params)
+        orig_data = base_data.copy()
+
+        op.execute(base_data)
+        pdt.assert_frame_equal(orig_data, base_data)
+
 
 class TestMassEditOperation(CommonOperationTests):
 
@@ -345,10 +352,12 @@ class TestColumnRemovalOperation(CommonOperationTests):
                 "description": "Remove column remove_me",
                 "columnName": "remove_me"}
 
-    def test_remove_column(self, default_params):
-        base_data = pd.DataFrame({'keep_me': np.arange(20),
-                                  'remove_me': np.arange(20)})
+    @pytest.fixture
+    def base_data(self):
+        return pd.DataFrame({'keep_me': np.arange(20),
+                             'remove_me': np.arange(20)})
 
+    def test_remove_column(self, default_params, base_data):
         action = pyrefine.ops.create(default_params)
         actual_data = action.execute(base_data)
 
@@ -367,10 +376,12 @@ class TestColumnRenameOperation(CommonOperationTests):
                 "oldColumnName": "oldname",
                 "newColumnName": "blah"}
 
-    def test_remove_column(self, default_params):
-        base_data = pd.DataFrame({'keep_me': np.arange(20),
-                                  'oldname': np.arange(20)})
+    @pytest.fixture
+    def base_data(self):
+        return pd.DataFrame({'keep_me': np.arange(20),
+                             'oldname': np.arange(20)})
 
+    def test_remove_column(self, default_params, base_data):
         action = pyrefine.ops.create(default_params)
         actual_data = action.execute(base_data)
 
@@ -387,8 +398,8 @@ class TestColumnMoveOperation(CommonOperationTests):
     @pytest.fixture
     def default_params(self):
         return {"op": "core/column-move",
-                "description": "Move column DOI to position 0",
-                "columnName": "DOI",
+                "description": "Move column third to position 0",
+                "columnName": "third",
                 "index": 0}
 
     @pytest.fixture
@@ -398,7 +409,7 @@ class TestColumnMoveOperation(CommonOperationTests):
 
     def test_move_column_to_start(self, default_params, base_data):
         assert_op_changes_data(
-            dict(default_params, columnName='third', index=0),
+            default_params,
             base_data=base_data,
             expected_data=pd.DataFrame([[0, 1, 0, 0],
                                         [0, 0, 1, 0],
