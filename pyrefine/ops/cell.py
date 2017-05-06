@@ -32,8 +32,7 @@ class MassEditOperation:
         """Execute the operation.
 
         Args:
-            data (DataFrame): The data to transform. Not guaranteed
-                immutable.
+            data (DataFrame): The data to transform.
 
         Returns:
             DataFrame: The transformed data.
@@ -144,8 +143,7 @@ class MultivaluedCellSplitOperation:
         """Execute the operation.
 
         Args:
-            data (DataFrame): The data to transform. Not guaranteed
-                immutable.
+            data (DataFrame): The data to transform.
 
         Returns:
             DataFrame: The transformed data.
@@ -187,8 +185,7 @@ class MultivaluedCellJoinOperation:
         """Execute the operation.
 
         Args:
-            data (DataFrame): The data to transform. Not guaranteed
-                immutable.
+            data (DataFrame): The data to transform.
 
         Returns:
             DataFrame: The transformed data.
