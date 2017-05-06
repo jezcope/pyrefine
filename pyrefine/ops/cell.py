@@ -114,6 +114,46 @@ class BlankDownOperation:
         return data.assign(**{self.column: new_column})
 
 
+@operation('fill-down')
+class FillDownOperation:
+    """Fill down blank values.
+
+    Expects a ``dict`` as loaded from OpenRefine JSON script.
+
+    Args:
+        parameters['description'] (str): Human-readable description
+        parameters['columnName'] (str): Column to edit
+    """
+
+    def __init__(self, parameters):
+        """Initialise the operation."""
+        self.description = parameters['description']
+        self.column = parameters['columnName']
+
+    def execute(self, data):
+        """Execute the operation.
+
+        Args:
+            data (DataFrame): The data to transform.
+
+        Returns:
+            DataFrame: The transformed data.
+
+        Raises:
+            TypeError: If data in the relevant column is not a string.
+
+        """
+        new_column = data[self.column].copy()
+        last_val = None
+
+        for i, val in enumerate(new_column):
+            if val is None:
+                new_column[i] = last_val
+            else:
+                last_val = val
+
+        return data.assign(**{self.column: new_column})
+
 
 @operation('multivalued-cell-split')
 class MultivaluedCellSplitOperation:
