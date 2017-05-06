@@ -274,6 +274,35 @@ class TestMassEditOperation(CommonOperationTests):
                               'questionable', ['right', 'right']]))
 
 
+class TestBlankDownOperation(CommonOperationTests):
+
+    op_class = pyrefine.ops.BlankDownOperation
+
+    @pytest.fixture
+    def default_params(self):
+        return {"op": "core/blank-down",
+                "description": "Blank down cells in column tidy_up",
+                "engineConfig": {
+                    "mode": "row-based",
+                    "facets": []
+                },
+                "columnName": "tidy_up"}
+
+    @pytest.fixture
+    def base_data(self):
+        return pd.DataFrame({'id': np.arange(10),
+                             'tidy_up': ['one', 'two', 'two', 'three', 'four',
+                                         'four', 'four', 'four', 'five', 'five']})
+
+    def test_blank_down(self, default_params, base_data):
+        assert_op_changes_data(
+            default_params,
+            base_data=base_data,
+            expected_data=base_data.assign(
+                tidy_up=['one', 'two', None, 'three', 'four',
+                         None, None, None, 'five', None]))
+
+
 class TestMultivaluedCellSplitOperation(CommonOperationTests):
 
     op_class = pyrefine.ops.MultivaluedCellSplitOperation
