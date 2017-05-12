@@ -9,6 +9,8 @@
 
 from .base import operation
 
+import pandas as pd
+
 
 @operation('mass-edit')
 class MassEditOperation:
@@ -233,3 +235,44 @@ class MultivaluedCellJoinOperation:
         """
         return data.assign(**{self.column:
                               data[self.column].apply(self._transform)})
+
+
+@operation('transpose-rows-into-columns')
+class TransposeRowsIntoColumnsOperation:
+    """Transpose data in rows into multiple columns.
+
+    Expects a ``dict`` as loaded from OpenRefine JSON script.
+
+    Args:
+        parameters['description'] (str): Human-readable description
+        parameters['columnName'] (str): Column to edit
+        parameters['rowCount'] (str): Number of rows to transpose
+    """
+
+    def __init__(self, parameters):
+        """Initialise the operation."""
+        self.description = parameters['description']
+        self.column = parameters['columnName']
+        self.row_count = parameters['rowCount']
+
+    def execute(self, data):
+        """Execute the operation.
+
+        Args:
+            data (DataFrame): The data to transform.
+
+        Returns:
+            DataFrame: The transformed data.
+
+        """
+        old_col = data[self.column]
+        new_col = [pd.Series(index=data.index, dtype=old_col.dtype)
+                   for _ in range(self.row_count)]
+        n_rows = len(old_col)
+        for i in range(self.row_count):
+            new_col[i][0:n_rows-i:self.row_count] \
+                = old_col[i:n_rows:self.row_count]
+
+        return data.drop(self.column, axis=1) \
+            .assign(**{'{} {}'.format(self.column, i + 1): new_col[i]
+                       for i in range(self.row_count)})

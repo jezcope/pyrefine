@@ -412,6 +412,87 @@ class TestMultivaluedCellJoinOperation(CommonOperationTests):
                          base_data, TypeError)
 
 
+class TestTransposeRowsIntoColumnsOperation(CommonOperationTests):
+
+    op_class = pyrefine.ops.TransposeRowsIntoColumnsOperation
+
+    @pytest.fixture
+    def default_params(self):
+        return {"op": "core/transpose-rows-into-columns",
+                "description": "Transpose every 2 cells in column transpose into separate columns",
+                "columnName": "transpose",
+                "rowCount": 2}
+
+    @pytest.fixture
+    def base_data(self):
+        return pd.DataFrame({'id': np.arange(10),
+                             'transpose': ['one', 'two', 'three', 'four', 'five',
+                                           'six', 'seven', 'eight', 'nine', 'ten']})
+
+    def test_transpose_two_rows(self, default_params, base_data):
+        expected_data = base_data.copy()
+        del expected_data['transpose']
+        expected_data['transpose 1'] = ['one', None, 'three', None, 'five',
+                                        None, 'seven', None, 'nine', None]
+        expected_data['transpose 2'] = ['two', None, 'four', None, 'six',
+                                        None, 'eight', None, 'ten', None]
+
+        assert_op_changes_data(
+            default_params,
+            base_data=base_data,
+            expected_data=expected_data)
+
+    def test_transpose_five_rows(self, default_params, base_data):
+        expected_data = base_data.copy()
+        del expected_data['transpose']
+        expected_data['transpose 1'] = ['one', None, None, None, None,
+                                        'six', None, None, None, None]
+        expected_data['transpose 2'] = ['two', None, None, None, None,
+                                        'seven', None, None, None, None]
+        expected_data['transpose 3'] = ['three', None, None, None, None,
+                                        'eight', None, None, None, None]
+        expected_data['transpose 4'] = ['four', None, None, None, None,
+                                        'nine', None, None, None, None]
+        expected_data['transpose 5'] = ['five', None, None, None, None,
+                                        'ten', None, None, None, None]
+
+        assert_op_changes_data(
+            dict(default_params, rowCount=5),
+            base_data=base_data,
+            expected_data=expected_data)
+
+
+    def test_transpose_three_rows(self, default_params, base_data):
+        expected_data = base_data.copy()
+        del expected_data['transpose']
+        expected_data['transpose 1'] = ['one', None, None, 'four', None,
+                                        None, 'seven', None, None, 'ten']
+        expected_data['transpose 2'] = ['two', None, None, 'five', None,
+                                        None, 'eight', None, None, None]
+        expected_data['transpose 3'] = ['three', None, None, 'six', None,
+                                        None, 'nine', None, None, None]
+
+        assert_op_changes_data(
+            dict(default_params, rowCount=3),
+            base_data=base_data,
+            expected_data=expected_data)
+
+
+    def test_transpose_two_rows_numeric(self, default_params, base_data):
+        base_data['transpose'] = np.arange(10)
+        expected_data = base_data.copy()
+        del expected_data['transpose']
+        expected_data['transpose 1'] = [0, np.NaN, 2, np.NaN, 4,
+                                        np.NaN, 6, np.NaN, 8, np.NaN]
+        expected_data['transpose 2'] = [1, np.NaN, 3, np.NaN, 5,
+                                        np.NaN, 7, np.NaN, 9, np.NaN]
+
+        assert_op_changes_data(
+            default_params,
+            base_data=base_data,
+            expected_data=expected_data)
+
+
 class TestColumnRemovalOperation(CommonOperationTests):
 
     op_class = pyrefine.ops.ColumnRemovalOperation
