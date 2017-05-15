@@ -11,14 +11,14 @@ import pyrefine
 
 def assert_op_changes_data(params, *, base_data, expected_data):
     op = pyrefine.ops.create(params)
-    actual_data = op.execute(base_data)
+    actual_data = op(base_data)
 
     pdt.assert_frame_equal(expected_data, actual_data)
 
 def assert_op_raises(params, data, exception):
     op = pyrefine.ops.create(params)
     with pytest.raises(exception):
-        op.execute(data)
+        op(data)
 
 
 class TestOperation:
@@ -44,7 +44,7 @@ class CommonOperationTests:
         op = pyrefine.ops.create(default_params)
         orig_data = base_data.copy()
 
-        op.execute(base_data)
+        op(base_data)
         pdt.assert_frame_equal(orig_data, base_data)
 
 
@@ -363,7 +363,7 @@ class TestColumnRemovalOperation(CommonOperationTests):
 
     def test_remove_column(self, default_params, base_data):
         action = pyrefine.ops.create(default_params)
-        actual_data = action.execute(base_data)
+        actual_data = action(base_data)
 
         assert 'remove_me' not in actual_data.columns
         assert 'keep_me' in actual_data.columns
@@ -385,9 +385,9 @@ class TestColumnRenameOperation(CommonOperationTests):
         return pd.DataFrame({'keep_me': np.arange(20),
                              'oldname': np.arange(20)})
 
-    def test_remove_column(self, default_params, base_data):
+    def test_rename_column(self, default_params, base_data):
         action = pyrefine.ops.create(default_params)
-        actual_data = action.execute(base_data)
+        actual_data = action(base_data)
 
         assert 'oldname' not in actual_data.columns
         assert 'blah' in actual_data.columns

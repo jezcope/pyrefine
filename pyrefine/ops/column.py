@@ -25,7 +25,7 @@ class ColumnRemovalOperation:
         self.description = parameters['description']
         self.column = parameters['columnName']
 
-    def execute(self, data):
+    def __call__(self, data):
         """Remove the specified column from ``data``.
 
         The column to remove is given by ``self.column``.
@@ -59,7 +59,7 @@ class ColumnRenameOperation:
         self.transform = {parameters['oldColumnName']:
                           parameters['newColumnName']}
 
-    def execute(self, data):
+    def __call__(self, data):
         """Execute the operation.
 
         Args:
@@ -83,7 +83,7 @@ class ColumnMoveOperation:
         self.column = parameters['columnName']
         self.index = parameters['index']
 
-    def execute(self, data):
+    def __call__(self, data):
         """Execute the operation.
 
         Args:

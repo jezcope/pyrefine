@@ -30,7 +30,7 @@ class MassEditOperation:
         self.column = parameters['columnName']
         self.edits = parameters['edits']
 
-    def execute(self, data):
+    def __call__(self, data):
         """Execute the operation.
 
         Args:
@@ -91,7 +91,7 @@ class BlankDownOperation:
         self.description = parameters['description']
         self.column = parameters['columnName']
 
-    def execute(self, data):
+    def __call__(self, data):
         """Execute the operation.
 
         Args:
@@ -132,7 +132,7 @@ class FillDownOperation:
         self.description = parameters['description']
         self.column = parameters['columnName']
 
-    def execute(self, data):
+    def __call__(self, data):
         """Execute the operation.
 
         Args:
@@ -181,7 +181,7 @@ class MultivaluedCellSplitOperation:
         else:
             return [value]
 
-    def execute(self, data):
+    def __call__(self, data):
         """Execute the operation.
 
         Args:
@@ -223,7 +223,7 @@ class MultivaluedCellJoinOperation:
     def _transform(self, value):
         return self.separator.join(value)
 
-    def execute(self, data):
+    def __call__(self, data):
         """Execute the operation.
 
         Args:
@@ -255,7 +255,7 @@ class TransposeRowsIntoColumnsOperation:
         self.column = parameters['columnName']
         self.row_count = parameters['rowCount']
 
-    def execute(self, data):
+    def __call__(self, data):
         """Execute the operation.
 
         Args:

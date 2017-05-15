@@ -31,7 +31,7 @@ class Script(object):
 
         """
         for op in self.operations:
-            data = op.execute(data)
+            data = op(data)
 
         return data
 
