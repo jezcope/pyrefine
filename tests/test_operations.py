@@ -29,7 +29,7 @@ class TestOperation:
         with pytest.raises(KeyError):
             pyrefine.ops.create({})
 
-    def test_create_unknown_action(self):
+    def test_create_unknown_operation(self):
         with pytest.raises(RuntimeError):
             pyrefine.ops.create({'op': 'does not exist'})
 
@@ -352,8 +352,8 @@ class TestColumnRemovalOperation(CommonOperationTests):
                              'remove_me': np.arange(20)})
 
     def test_remove_column(self, default_params, base_data):
-        action = pyrefine.ops.create(default_params)
-        actual_data = action(base_data)
+        op = pyrefine.ops.create(default_params)
+        actual_data = op(base_data)
 
         assert 'remove_me' not in actual_data.columns
         assert 'keep_me' in actual_data.columns
@@ -374,8 +374,8 @@ class TestColumnRenameOperation(CommonOperationTests):
                              'oldname': np.arange(20)})
 
     def test_rename_column(self, default_params, base_data):
-        action = pyrefine.ops.create(default_params)
-        actual_data = action(base_data)
+        op = pyrefine.ops.create(default_params)
+        actual_data = op(base_data)
 
         assert 'oldname' not in actual_data.columns
         assert 'blah' in actual_data.columns
