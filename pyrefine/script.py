@@ -49,7 +49,8 @@ def load_script(f):
     if isinstance(f, str):
         f = open(f)
 
-    return parse(f.read())
+    with f:
+        return parse(f.read())
 
 
 parse = Script

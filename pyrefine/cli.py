@@ -3,7 +3,7 @@
 
 import click
 import pandas as pd
-from .script import parse
+from .script import load_script
 
 
 @click.group()
@@ -18,8 +18,9 @@ def main(args=None):
 @click.option('--outfile', '-o', default='-', type=click.File('w'))
 def execute(script, data, outfile):
     """Execute a JSON script against a CSV data file."""
-    parsed = parse(script.read())
+    parsed = load_script(script)
     input_data = pd.read_csv(data)
+
     output_data = parsed.execute(input_data)
     output_data.to_csv(outfile, index=False)
 
