@@ -203,7 +203,7 @@ class MultivaluedCellSplitOperation:
 
 
 @operation('multivalued-cell-join')
-class MultivaluedCellJoinOperation:
+def multivalued_cell_join(params):
     """Join lists into single strings with a separator.
 
     Expects a ``dict`` as loaded from OpenRefine JSON script.
@@ -213,28 +213,14 @@ class MultivaluedCellJoinOperation:
         parameters['columnName'] (str): Column to edit
         parameters['separator'] (str): String with which to join values
     """
+    column = params['columnName']
+    sep = params['separator']
 
-    def __init__(self, parameters):
-        """Initialise the operation."""
-        self.description = parameters['description']
-        self.column = parameters['columnName']
-        self.separator = parameters['separator']
+    def exec_multivalued_cell_join(data):
+        return data.assign(**{column:
+                              data[column].apply(lambda x: sep.join(x))})
 
-    def _transform(self, value):
-        return self.separator.join(value)
-
-    def __call__(self, data):
-        """Execute the operation.
-
-        Args:
-            data (DataFrame): The data to transform.
-
-        Returns:
-            DataFrame: The transformed data.
-
-        """
-        return data.assign(**{self.column:
-                              data[self.column].apply(self._transform)})
+    return exec_multivalued_cell_join
 
 
 @operation('transpose-rows-into-columns')
