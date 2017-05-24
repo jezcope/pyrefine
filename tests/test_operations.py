@@ -437,3 +437,49 @@ class TestColumnMoveOperation(CommonOperationTests):
     def test_move_non_existent_column(self, default_params, base_data):
         assert_op_raises(dict(default_params, columnName='seventh', index=2),
                          base_data, KeyError)
+
+
+class TestColumnMoveOperation(CommonOperationTests):
+
+    @pytest.fixture
+    def default_params(self):
+        return {"op": "core/column-reorder",
+                "description": "Reorder columns",
+                "columnNames": 'third first second fourth'.split()}
+
+    @pytest.fixture
+    def base_data(self):
+        return pd.DataFrame(np.eye(4, dtype=int),
+                            columns='first second third fourth'.split())
+
+    def test_simple_reorder_columns(self, default_params, base_data):
+        assert_op_changes_data(
+            default_params,
+            base_data=base_data,
+            expected_data=pd.DataFrame([[0, 1, 0, 0, ],
+                                        [0, 0, 1, 0, ],
+                                        [1, 0, 0, 0, ],
+                                        [0, 0, 0, 1, ]],
+                                       columns='third first second fourth'.split()))
+
+    def test_reverse_columns(self, default_params, base_data):
+        assert_op_changes_data(
+            dict(default_params,
+                 columnNames='fourth third second first'.split()),
+            base_data=base_data,
+            expected_data=pd.DataFrame([[0, 0, 0, 1, ],
+                                        [0, 0, 1, 0, ],
+                                        [0, 1, 0, 0, ],
+                                        [1, 0, 0, 0, ]],
+                                       columns='fourth third second first'.split()))
+
+    def test_remove_columns(self, default_params, base_data):
+        assert_op_changes_data(
+            dict(default_params,
+                 columnNames='fourth first'.split()),
+            base_data=base_data,
+            expected_data=pd.DataFrame([[0, 1, ],
+                                        [0, 0, ],
+                                        [0, 0, ],
+                                        [1, 0, ]],
+                                       columns='fourth first'.split()))

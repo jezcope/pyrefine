@@ -112,3 +112,12 @@ class ColumnMoveOperation:
         cols.insert(self.index, self.column)
 
         return data[cols]
+
+
+@operation('column-reorder')
+def column_reorder_operation(params):
+    """Move a specified column to a different position."""
+    def exec_column_reorder_operation(data):
+        return data[params['columnNames']]
+
+    return exec_column_reorder_operation
