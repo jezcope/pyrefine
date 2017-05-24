@@ -6,6 +6,8 @@ import pandas as pd
 import numpy as np
 import pandas.util.testing as pdt
 
+from collections.abc import Callable
+
 import pyrefine
 
 
@@ -35,10 +37,10 @@ class TestOperation:
 class CommonOperationTests:
 
     def test_create_valid_params(self, default_params):
-        action = pyrefine.ops.create(default_params)
+        op = pyrefine.ops.create(default_params)
 
-        assert action is not None
-        assert isinstance(action, self.op_class)
+        assert op is not None
+        assert isinstance(op, Callable)
 
     def test_input_immutable(self, default_params, base_data):
         op = pyrefine.ops.create(default_params)
@@ -129,8 +131,6 @@ class TestMassEditOperation(CommonOperationTests):
 
 class TestBlankDownOperation(CommonOperationTests):
 
-    op_class = pyrefine.ops.BlankDownOperation
-
     @pytest.fixture
     def default_params(self):
         return {"op": "core/blank-down",
@@ -158,8 +158,6 @@ class TestBlankDownOperation(CommonOperationTests):
 
 class TestFillDownOperation(CommonOperationTests):
 
-    op_class = pyrefine.ops.FillDownOperation
-
     @pytest.fixture
     def default_params(self):
         return {"op": "core/fill-down",
@@ -186,8 +184,6 @@ class TestFillDownOperation(CommonOperationTests):
 
 
 class TestMultivaluedCellSplitOperation(CommonOperationTests):
-
-    op_class = pyrefine.ops.MultivaluedCellSplitOperation
 
     @pytest.fixture
     def default_params(self):
@@ -233,8 +229,6 @@ class TestMultivaluedCellSplitOperation(CommonOperationTests):
 
 class TestMultivaluedCellJoinOperation(CommonOperationTests):
 
-    op_class = pyrefine.ops.MultivaluedCellJoinOperation
-
     @pytest.fixture
     def default_params(self):
         return {"op": "core/multivalued-cell-join",
@@ -266,8 +260,6 @@ class TestMultivaluedCellJoinOperation(CommonOperationTests):
 
 
 class TestTransposeRowsIntoColumnsOperation(CommonOperationTests):
-
-    op_class = pyrefine.ops.TransposeRowsIntoColumnsOperation
 
     @pytest.fixture
     def default_params(self):
@@ -348,8 +340,6 @@ class TestTransposeRowsIntoColumnsOperation(CommonOperationTests):
 
 class TestColumnRemovalOperation(CommonOperationTests):
 
-    op_class = pyrefine.ops.ColumnRemovalOperation
-
     @pytest.fixture
     def default_params(self):
         return {"op": "core/column-removal",
@@ -370,8 +360,6 @@ class TestColumnRemovalOperation(CommonOperationTests):
 
 
 class TestColumnRenameOperation(CommonOperationTests):
-
-    op_class = pyrefine.ops.ColumnRenameOperation
 
     @pytest.fixture
     def default_params(self):
@@ -396,8 +384,6 @@ class TestColumnRenameOperation(CommonOperationTests):
 
 
 class TestColumnMoveOperation(CommonOperationTests):
-
-    op_class = pyrefine.ops.ColumnMoveOperation
 
     @pytest.fixture
     def default_params(self):
