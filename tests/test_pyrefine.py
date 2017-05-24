@@ -54,7 +54,8 @@ def doaj_script_filename():
 
 @pytest.fixture
 def doaj_script(doaj_script_filename):
-    return open(doaj_script_filename).read()
+    with open(doaj_script_filename) as f:
+        return f.read()
 
 
 class TestCLI:
@@ -75,7 +76,8 @@ class TestCLI:
         result = runner.invoke(cli.execute,
                                [doaj_script_filename, doaj_data_filename])
 
-        expected_data = open(doaj_data_clean_filename).read()
+        with open(doaj_data_clean_filename) as f:
+            expected_data = f.read()
 
         assert result.exit_code == 0
         assert result.output == expected_data
@@ -88,11 +90,12 @@ class TestCLI:
         result = runner.invoke(cli.execute,
                                [doaj_script_filename, doaj_data_filename,
                                 '-o', out_file])
-        expected_data = open(doaj_data_clean_filename).read()
+        with open(doaj_data_clean_filename) as f:
+            expected_data = f.read()
 
         assert result.exit_code == 0
-        actual_data = open(out_file).read()
-
+        with open(out_file) as f:
+            actual_data = f.read()
         assert actual_data == expected_data
 
 
