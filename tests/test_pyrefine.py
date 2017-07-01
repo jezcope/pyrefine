@@ -15,10 +15,11 @@ import pytest
 # from contextlib import contextmanager
 from click.testing import CliRunner
 
-import os.path
 from tempfile import mktemp
 import pandas as pd
 import pandas.util.testing as pdt
+
+from .utils import FIXTURES_PATH
 
 import pyrefine
 from pyrefine import cli
@@ -26,8 +27,7 @@ from pyrefine import cli
 
 @pytest.fixture
 def doaj_data_filename():
-    return os.path.join(os.path.dirname(__file__),
-                        'fixtures/doaj-article-sample.csv')
+    return str(FIXTURES_PATH / 'doaj-article-sample.csv')
 
 
 @pytest.fixture
@@ -37,8 +37,8 @@ def doaj_data(doaj_data_filename):
 
 @pytest.fixture
 def doaj_data_clean_filename():
-    return os.path.join(os.path.dirname(__file__),
-                        'fixtures/doaj-article-sample-cleaned.csv')
+    return str(FIXTURES_PATH / 'doaj-article-sample-cleaned.csv')
+
 
 
 @pytest.fixture
@@ -48,8 +48,7 @@ def doaj_data_clean(doaj_data_clean_filename):
 
 @pytest.fixture
 def doaj_script_filename():
-    return os.path.join(os.path.dirname(__file__),
-                        'fixtures/doaj-article-clean.json')
+    return str(FIXTURES_PATH / 'doaj-article-clean.json')
 
 
 @pytest.fixture
@@ -102,23 +101,26 @@ class TestCLI:
 class TestScript:
 
     def test_load_file_object(self):
-        with open(os.path.dirname(__file__)
-                  + '/fixtures/example_script.json') as f:
+        with open(FIXTURES_PATH / 'example_script.json') as f:
             script = pyrefine.load_script(f)
 
         assert script is not None
         assert isinstance(script, pyrefine.Script)
 
-    def test_load_file_name(self):
-        script = pyrefine.load_script(os.path.dirname(__file__)
-                                      + '/fixtures/example_script.json')
+    def test_load_file_name_string(self):
+        script = pyrefine.load_script(str(FIXTURES_PATH) + '/example_script.json')
+
+        assert script is not None
+        assert isinstance(script, pyrefine.Script)
+
+    def test_load_pathlib_path(self):
+        script = pyrefine.load_script(FIXTURES_PATH / 'example_script.json')
 
         assert script is not None
         assert isinstance(script, pyrefine.Script)
 
     def test_load_string(self):
-        with open(os.path.dirname(__file__)
-                  + '/fixtures/example_script.json') as f:
+        with open(FIXTURES_PATH / 'example_script.json') as f:
             script_string = f.read()
 
         script = pyrefine.parse(script_string)

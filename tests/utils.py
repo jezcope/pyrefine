@@ -1,3 +1,9 @@
+from pathlib import Path
+
+TEST_PATH = Path(__file__).parent
+FIXTURES_PATH = TEST_PATH / 'fixtures'
+
+
 def print_frame_differing_rows(df1, df2):
     """Print the difference between two :class:`DataFrame`s
 

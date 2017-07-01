@@ -1,6 +1,7 @@
 """A script is a series of operations."""
 
 import json
+import os
 
 from .ops import create
 
@@ -46,7 +47,7 @@ def load_script(f):
         :class:`Script`: The parsed script object.
 
     """
-    if isinstance(f, str):
+    if isinstance(f, (str, os.PathLike)):
         f = open(f)
 
     with f:
