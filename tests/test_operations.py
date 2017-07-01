@@ -483,3 +483,72 @@ class TestColumnMoveOperation(CommonOperationTests):
                                         [0, 0, ],
                                         [1, 0, ]],
                                        columns='fourth first'.split()))
+
+
+class TestColumnAdditionOperation(CommonOperationTests):
+
+    @pytest.fixture
+    def default_params(self):
+        return {"op": "core/column-addition",
+                "description": "Create new column based on expression",
+                "engineConfig": {
+                    "mode": "row-based",
+                    "facets": []
+                },
+                "newColumnName": "fifth",
+                "columnInsertIndex": 4,
+                "baseColumnName": "second",
+                "expression": "jython:return value + 10",
+                "onError": "set-to-blank"}
+
+    @pytest.fixture
+    def base_data(self):
+        return pd.DataFrame(np.eye(4, dtype=int),
+                            columns='first second third fourth'.split())
+
+    def test_executes_expression(self, default_params, base_data):
+        assert_op_changes_data(
+            default_params,
+            base_data=base_data,
+            expected_data=base_data.assign(
+                fifth=[10, 11, 10, 10]))
+
+    def test_inserts_at_correct_index(self, default_params, base_data):
+        op = pyrefine.ops.create(
+            dict(default_params, columnInsertIndex=1))
+
+        actual_data = op(base_data)
+
+        pdt.assert_index_equal(
+            actual_data.columns,
+            pd.Index('first fifth second third fourth'.split()))
+
+
+    def test_blank_on_error(self, default_params, base_data):
+        assert_op_changes_data(
+            dict(default_params,
+                 onError='set-to-blank',
+                 expression='jython:raise RuntimeError()'),
+            base_data=base_data,
+            expected_data=base_data.assign(
+                fifth=[None, None, None, None]))
+
+    def test_keep_original_on_error(self, default_params, base_data):
+        assert_op_changes_data(
+            dict(default_params,
+                 onError='keep-original',
+                 expression='jython:raise RuntimeError()'),
+            base_data=base_data,
+            expected_data=base_data.assign(
+                fifth=base_data.second))
+
+    def test_store_error(self, default_params, base_data):
+        op = pyrefine.ops.create(
+            dict(default_params,
+                 onError='store-error',
+                 expression='jython:raise RuntimeError()'))
+
+        actual_data = op(base_data)
+
+        for i, value in enumerate(actual_data.fifth):
+            assert isinstance(value, RuntimeError), f'{i}: {value}'

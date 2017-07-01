@@ -5,8 +5,11 @@
     ColumnRemovalOperation
     ColumnRenameOperation
     ColumnMoveOperation
+    column_reorder_operation
+    column_addition_operation
 """
 from .base import operation
+from ..expressions import compile_expression
 
 
 @operation('column-removal')
@@ -121,3 +124,21 @@ def column_reorder_operation(params):
         return data[params['columnNames']]
 
     return exec_column_reorder_operation
+
+
+@operation('column-addition')
+def column_addition_operation(params):
+    """Add a new column based on an existing one."""
+    base_column_name = params['baseColumnName']
+    new_column_name = params['newColumnName']
+    insert_index = params['columnInsertIndex']
+    expression = compile_expression(params['expression'],
+                                    on_error=params['onError'])
+
+    def exec_column_addition_operation(data):
+        new_cols = data.columns.insert(insert_index, new_column_name)
+        return data.assign(**{new_column_name:
+                              lambda row: expression(row[base_column_name])}) \
+                   .reindex(columns=new_cols)
+
+    return exec_column_addition_operation
