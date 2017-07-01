@@ -43,3 +43,16 @@ class TestPythonExpression:
     def test_raises_syntax_error_for_invalid_code(self):
         with pytest.raises(SyntaxError):
             compile_expression('jython:value +')
+
+    @pytest.mark.parametrize('on_error,test', [
+        ('set-to-blank', lambda x: x is None),
+        ('store-error',   lambda x: isinstance(x, RuntimeError)),
+        ('keep-original', lambda x: x == 42),
+    ])
+    def test_handles_error(self, on_error, test):
+        function = compile_expression('jython:raise RuntimeError()',
+                                          on_error=on_error)
+
+        result = function(42)
+
+        assert test(result), on_error

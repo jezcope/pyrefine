@@ -36,7 +36,7 @@ class TestOperation:
 
 class CommonOperationTests:
 
-    def test_create_valid_params(self, default_params):
+    def test_create_with_valid_params(self, default_params):
         op = pyrefine.ops.create(default_params)
 
         assert op is not None
