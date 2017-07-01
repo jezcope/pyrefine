@@ -1,0 +1,242 @@
+[
+  {
+    "op": "core/column-rename",
+    "description": "Rename column WHEN to humandate",
+    "oldColumnName": "WHEN",
+    "newColumnName": "humandate"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column WHERE to venue",
+    "oldColumnName": "WHERE",
+    "newColumnName": "venue"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column year at index 1 based on column humandate using expression jython:import re\nresult = re.search(r'\\d{4}', value)\nreturn result.group(0)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "year",
+    "columnInsertIndex": 1,
+    "baseColumnName": "humandate",
+    "expression": "jython:import re\nresult = re.search(r'\\d{4}', value)\nreturn result.group(0)",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column month at index 1 based on column humandate using expression jython:import re\nresult = re.search(r'\\b[A-Za-z]+\\b', value)\nreturn result.group(0)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "month",
+    "columnInsertIndex": 1,
+    "baseColumnName": "humandate",
+    "expression": "jython:import re\nresult = re.search(r'\\b[A-Za-z]+\\b', value)\nreturn result.group(0)",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column day-range at index 1 based on column humandate using expression jython:import re\nmatch = re.search(r'(\\b\\d{1,2}\\b)(?:\\s|, \\d+|-|/)*(\\b\\d{1,2}\\b)?', value)\nif match.group(2) is not None:\n    return match.group(1) + '-' + match.group(2)\nelse:\n    return match.group(1) + '-' + match.group(1)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "day-range",
+    "columnInsertIndex": 1,
+    "baseColumnName": "humandate",
+    "expression": "jython:import re\nmatch = re.search(r'(\\b\\d{1,2}\\b)(?:\\s|, \\d+|-|/)*(\\b\\d{1,2}\\b)?', value)\nif match.group(2) is not None:\n    return match.group(1) + '-' + match.group(2)\nelse:\n    return match.group(1) + '-' + match.group(1)",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-split",
+    "description": "Split column day-range by separator",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "day-range",
+    "guessCellType": true,
+    "removeOriginalColumn": true,
+    "mode": "separator",
+    "separator": "-",
+    "regex": false,
+    "maxColumns": 0
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column day-range 1 to start-day",
+    "oldColumnName": "day-range 1",
+    "newColumnName": "start-day"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column day-range 2 to end-day",
+    "oldColumnName": "day-range 2",
+    "newColumnName": "end-day"
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column month",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "month",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Feb"
+        ],
+        "to": "February"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column month",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "month",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "Nov"
+        ],
+        "to": "November"
+      }
+    ]
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column start at index 5 based on column year using expression jython:return '%i %s %s' % (cells['start-day']['value'], cells['month']['value'], cells['year']['value'])",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "start",
+    "columnInsertIndex": 5,
+    "baseColumnName": "year",
+    "expression": "jython:return '%i %s %s' % (cells['start-day']['value'], cells['month']['value'], cells['year']['value'])",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column end at index 5 based on column year using expression jython:return '%i %s %s' % (cells['end-day']['value'], cells['month']['value'], cells['year']['value'])",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "end",
+    "columnInsertIndex": 5,
+    "baseColumnName": "year",
+    "expression": "jython:return '%i %s %s' % (cells['end-day']['value'], cells['month']['value'], cells['year']['value'])",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column end using expression value.toDate()",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "end",
+    "expression": "value.toDate()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column start using expression value.toDate()",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "start",
+    "expression": "value.toDate()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+  {
+    "op": "core/column-addition-by-fetching-urls",
+    "description": "Create column geocode at index 8 by fetching URLs based on column venue using expression jython:import urllib\nreturn \"http://maps.google.com/maps/api/geocode/json?sensor=false&address=\" + urllib.quote_plus(value)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "geocode",
+    "columnInsertIndex": 8,
+    "baseColumnName": "venue",
+    "urlExpression": "jython:import urllib\nreturn \"http://maps.google.com/maps/api/geocode/json?sensor=false&address=\" + urllib.quote_plus(value)",
+    "onError": "set-to-blank",
+    "delay": 5000
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column latitude at index 9 based on column geocode using expression jython:import json\nreturn json.loads(value)['results'][0]['geometry']['location']['lat']",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "latitude",
+    "columnInsertIndex": 9,
+    "baseColumnName": "geocode",
+    "expression": "jython:import json\nreturn json.loads(value)['results'][0]['geometry']['location']['lat']",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column longitude at index 9 based on column geocode using expression jython:import json\nreturn json.loads(value)['results'][0]['geometry']['location']['lng']",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "longitude",
+    "columnInsertIndex": 9,
+    "baseColumnName": "geocode",
+    "expression": "jython:import json\nreturn json.loads(value)['results'][0]['geometry']['location']['lng']",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-removal",
+    "description": "Remove column geocode",
+    "columnName": "geocode"
+  },
+  {
+    "op": "core/column-removal",
+    "description": "Remove column WHO",
+    "columnName": "WHO"
+  },
+  {
+    "op": "core/column-removal",
+    "description": "Remove column ~NUMBERS",
+    "columnName": "~NUMBERS"
+  },
+  {
+    "op": "core/column-removal",
+    "description": "Remove column WHAT",
+    "columnName": "WHAT"
+  },
+  {
+    "op": "core/column-removal",
+    "description": "Remove column NOTES",
+    "columnName": "NOTES"
+  },
+  {
+    "op": "core/column-removal",
+    "description": "Remove column BLOG POSTS",
+    "columnName": "BLOG POSTS"
+  }
+]

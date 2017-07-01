@@ -1,0 +1,35 @@
+WHEN,WHERE ,WHO,~NUMBERS,WHAT,NOTES,BLOG POSTS
+Nov 2015,City University London,James Baker,59,,,https://cradledincaricature.com/2015/12/01/library-carpentry-in-words-and-numbers-all-code-no-woodwork/
+Feb 2016,Brisbane ResBaz,Belinda Weaver,15-20?,"LC Module 1 only (jargon, data structures, regex)",,
+17-18 March 2016,University of Oslo,Elin Stangeland,,https://scriptotek.github.io/2016-03-17-BS/,,http://software-carpentry.org/blog/2016/04/carpentry_week_2016_oslo.html
+13-14 June 2016,University of Queensland,Belinda Weaver,18,http://weaverbel.github.io/2016-06-13-LibCarp/index.html,"Taught 1-4 (regex, shell, git, OR)",http://software-carpentry.org/blog/2016/06/LCworkshop.html
+23-24 June 2016,"Basel University Library, Switzerland",Thomas Guignard et al.,39,https://swissbib.github.io/2016-06-23-basel/,Regular Software Carpentry workshop + modified OR lesson.,
+14-15 July 2016,"James Cook Uni, Townsville","Daniel Baird, Jay van Schyndel",,https://jcu-eresearch.github.io/2016-07-LibraryCarpentry/index.html,"Taught 1-4 (regex, shell, git, OR)",http://software-carpentry.org/blog/2016/07/librarycarpentry-jcu.html
+18-22 July 2016,UC San Diego ,Juliane Schneider/Tim Dennis,37-40,https://ucsdlib.github.io/2016-07-18-UCSD/,"Taught 1-4 (regex, shell, git, OR)",http://software-carpentry.org/blog/2016/08/lc-at-ucsd.html
+28-29 July 2016,University of Toronto,Thomas Guignard et al.,40,https://code4libtoronto.github.io/2016-07-28-librarycarpentry/,"XPath/XQuery, regex, OR, Python, Web Scraping",http://software-carpentry.org/blog/2016/07/library-carpentry-in-toronto.html
+25-26 August 2016,"Pretoria, South Africa",Anelda van der Walt / Cam Macdonell,30,"LC Module 1, OpenRefine, git/github, and a lesson sprint",Host: http://www.csir.co.za/; with: https://nedicc.com/,
+August 2016,ALIA Nat Conf,Belinda Weaver,,LC workshop - intro + OR (not the full workshop),Bits of 1 and 4,
+9 September 2016,QULOC ,Belinda Weaver,,LC workshop - intro + OR (not the full workshop),Bits of 1 and 4,
+10-11 October 2016,UC Berkeley/BIDS,Tim Dennis/Harrison Dekker,37,https://jt14den.github.io/2016-10-10-UCB/,"TBD, def. OF/regex",
+4 November 2016,"Macquarie University Library, Sydney",Carmi Cronje,5,Data-Intro,Small pilot,
+11 November 2016,"Macquarie University Library, Sydney",Carmi Cronje,7,OpenRefine,Small pilot,
+November TBA,"QUT Library, Brisbane",Catherine Haden. Tricia Kelly,,Mainly Open Refine - these are people I taught at my workshop,,
+17-18 November 2016,University of Cambridge,"Brenda Moon, Laurent Gatto",tbc,"LC Open Refine, LC SQL, library-python (""An introduction to working with data for Humanities Researchers - Cambridge Digital Humanities Network"")",,
+21-22 November 2016,The University of Leeds,40,tbc,https://arcleeds.github.io/2016-11-21-leeds/,,
+25 November 2016,"Macquarie University Library, Sydney",Carmi Cronje,7,Unix Shell,Small pilot,
+7 December 2016,DTU Library Copenhagen,Baker,40,"Shell Lesson only, as part of http://www.dst4l.info/ event",,
+9 December 2016,"Macquarie University Library, Sydney",Carmi Cronje,6,Git/GitHub using GitHub for Desktop (adapted from DST4L 2015),Small pilot,
+"1-3 February 2017
+",University of Oslo Science Library,"Elin Stangeland, Dan Michael Heggø, Kyrre Traavik Låberg",tbc,Part of ResBaz2017 Oslo https://2017.resbaz.com/oslo http://www.ub.uio.no/kurs-arrangement/kurs/enkeltstaende/bibsloid/tid-og-sted/170202.html,Full LC,
+7/23 March 2017,University of Sheffield,"Jez Cope, Martin Callaghan, Elly Cope",50,"Data Intro, Spreadsheets (from DC), OpenRefine, Python",,
+"3, 6, 10, 13 April 2017",University of Cambridge,Nicholas Cutler,???,"Bespoke shell, refine, python",Locally run event not directly supported by LC https://camlit.wordpress.com/2017/02/01/software-skills-for-librarians/ http://www.cl.cam.ac.uk/~ncc25/libcarp/index.html,
+5 May 2017,University of Cape Town,Isak van der Walt; Erika Mias; Kayleigh Roos,???,"Part of eResearch Africa http://www.eresearch.ac.za/programme-2017#Friday,_05_May_2017",Intro and Open Refine,
+18 May 2017,University of Manchester,"Jez Cope, Guyda Armstrong",tbc,Parts of data intro and shell lessons (half-day taster),Part of 2-day Digital Humanities workshop,
+18 May 2017,"University of Pittsburgh
+","Matt Burton, Tim Dennis, James Baker",37,Bash and OF ,"Attached to IMLS Data Science in Libraries workshop. For librarians at the Carnegie Library of Pittsburgh, the University of Pittsburgh Library of System, and Carnegie Mellon Libraries.",
+15 May 2017,Boston/Cambridge,"Belinda Weaver, Julianna Schneider",30,"Regex, bash, refine https://weaverbel.github.io/2017-05-11-lc-boston/",,
+31 May 2017,"Macquarie University Library, Sydney","Carmi Cronje, Fiona Jones",10,OpenRefine,,
+15 June 2017,Taunton (Somerset Libraries),Dave Rowe,???,"Intro, Git, Maps (bespoke)",https://www.eventbrite.co.uk/e/library-carpentry-south-west-tickets-32938061629,
+23 June 2017,"Canberra (Australian Library and Information Association, New Librarians Symposium)","Carmi Cronje, Fiona Jones",20,http://nls8.com/wp-content/uploads/2017/02/Draft_Program_NLS8_v5_Febuary_2017.pdf,Parts of 1 and 4,
+Q2 2017,"Curtin University, Western Australia","Janice Chan, Matthew Robinson, Marie Clarke",~20,All modules,"Spread over a couple of months, internal only",n/a
+1-2 June 2017,Everywhere!,Everyone!,101,Mozilla Global Sprint,,
