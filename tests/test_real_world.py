@@ -9,17 +9,13 @@ from .utils import FIXTURES_PATH
 import pyrefine
 
 
-def assert_script_runs(input_filename, expected_filename, script_filename):
-    input_data = pd.read_csv(FIXTURES_PATH / input_filename)
-    expected_data = pd.read_csv(FIXTURES_PATH / expected_filename)
-    script = pyrefine.load_script(FIXTURES_PATH / script_filename)
+@pytest.mark.xfail
+def test_workshop_script():
+    example = 'workshops'
+    input_data = pd.read_csv(FIXTURES_PATH / f'{example}-raw.csv')
+    expected_data = pd.read_csv(FIXTURES_PATH / f'{example}-clean.csv')
+    script = pyrefine.load_script(FIXTURES_PATH / f'{example}-script.json')
 
     actual_data = script.execute(input_data)
 
     pdt.assert_frame_equal(actual_data, expected_data)
-
-
-def test_workshop_script():
-    assert_script_runs('workshops-raw.csv',
-                       'workshops-clean.csv',
-                       'workshops-clean.json')
