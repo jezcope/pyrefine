@@ -1,0 +1,144 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "449b84a9bdbc4fe6344f891e4abe3ff28fd12ea0a124c41eabe36de6e1f8d8f0"
+        },
+        "requires": {},
+        "sources": [
+            {
+                "url": "https://pypi.python.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "click": {
+            "version": "==6.7"
+        },
+        "numpy": {
+            "version": "==1.13.0"
+        },
+        "pandas": {
+            "version": "==0.20.2"
+        },
+        "python-dateutil": {
+            "version": "==2.6.0"
+        },
+        "pytz": {
+            "version": "==2017.2"
+        },
+        "six": {
+            "version": "==1.10.0"
+        }
+    },
+    "develop": {
+        "alabaster": {
+            "version": "==0.7.10"
+        },
+        "babel": {
+            "version": "==2.4.0"
+        },
+        "bumpversion": {
+            "version": "==0.5.3"
+        },
+        "certifi": {
+            "version": "==2017.4.17"
+        },
+        "chardet": {
+            "version": "==3.0.4"
+        },
+        "coverage": {
+            "version": "==4.4.1"
+        },
+        "docutils": {
+            "version": "==0.13.1"
+        },
+        "flake8": {
+            "version": "==3.3.0"
+        },
+        "flake8-docstrings": {
+            "version": "==1.1.0"
+        },
+        "flake8-polyfill": {
+            "version": "==1.0.1"
+        },
+        "idna": {
+            "version": "==2.5"
+        },
+        "imagesize": {
+            "version": "==0.7.1"
+        },
+        "jinja2": {
+            "version": "==2.9.6"
+        },
+        "markupsafe": {
+            "version": "==1.0"
+        },
+        "mccabe": {
+            "version": "==0.6.1"
+        },
+        "mock": {
+            "version": "==2.0.0"
+        },
+        "pbr": {
+            "version": "==3.1.1"
+        },
+        "pluggy": {
+            "version": "==0.4.0"
+        },
+        "py": {
+            "version": "==1.4.34"
+        },
+        "pycodestyle": {
+            "version": "==2.3.1"
+        },
+        "pydocstyle": {
+            "version": "==2.0.0"
+        },
+        "pyflakes": {
+            "version": "==1.5.0"
+        },
+        "pygments": {
+            "version": "==2.2.0"
+        },
+        "pytest": {
+            "version": "==3.1.2"
+        },
+        "pytest-spec": {
+            "version": "==1.1.0"
+        },
+        "pytz": {
+            "version": "==2017.2"
+        },
+        "pyyaml": {
+            "version": "==3.12"
+        },
+        "requests": {
+            "version": "==2.18.1"
+        },
+        "setuptools": {
+            "version": "==36.0.1"
+        },
+        "six": {
+            "version": "==1.10.0"
+        },
+        "snowballstemmer": {
+            "version": "==1.2.1"
+        },
+        "sphinx": {
+            "version": "==1.6.2"
+        },
+        "sphinxcontrib-websupport": {
+            "version": "==1.0.1"
+        },
+        "tox": {
+            "version": "==2.7.0"
+        },
+        "urllib3": {
+            "version": "==1.21.1"
+        },
+        "virtualenv": {
+            "version": "==15.1.0"
+        }
+    }
+}

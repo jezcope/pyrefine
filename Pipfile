@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+
+[packages]
+pandas = ">=0.19.0"
+click = "*"
+
+[dev-packages]
+bumpversion = "*"
+flake8 = "*"
+flake8-docstrings = "*"
+tox = "*"
+coverage = "*"
+Sphinx = "*"
+PyYAML = "*"
+pytest = "*"
+pytest-spec = "*"
